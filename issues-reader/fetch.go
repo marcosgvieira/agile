@@ -76,16 +76,18 @@ func findLinkedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 // extractLinkedIssuesFromPullRequest extracts the linked GitHub issues from a pull request.
 func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
-	// Get the pull request information
-	pull, _, err := client.PullRequests.Get(ctx, owner, repo, pullNumber)
+	// Retrieve the comments for the pull request
+	comments, _, err := client.Issues.ListIssueComments(ctx, owner, repo, pullNumber, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Debug().Msg("PR BOdy = " + *pull.Body)
-
-	// Extract the linked issue numbers from the pull request body
-	linkedIssues := findIssuesInMessage(*pull.Body)
+	// Extract the linked issue numbers from the comments
+	linkedIssues := []int{}
+	for _, comment := range comments {
+		log.Debug().Msg("aqui: " + *comment.Body)
+		linkedIssues = append(linkedIssues, findIssuesInMessage(*comment.Body)...)
+	}
 
 	// Retrieve the linked issue details
 	issues := []*github.Issue{}
