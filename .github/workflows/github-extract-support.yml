@@ -5,14 +5,40 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Retrieve commits for release
+        id: commits
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          git fetch --depth=1 origin +refs/tags/$(git describe --abbrev=0 8.3.0-alpha3^):
+          echo "::set-output name=commits::$(git log --pretty=format:'%h' --abbrev-commit ${previous_tag}..${{ github.event.release.tag_name }})"
+
+      - name: Get correlated issues
+        id: issues
+        uses: gavinr/github-issues-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commits: ${{ steps.commits.outputs.commits }}
+
+      - name: Search for SEC-123
+        id: search
+        run: |
+          commits=$(echo "${{ steps.commits.outputs.commits }}" | sed 's/ /\\|/g')
+          pattern="SEC-123"
+          matches=$(echo "${{ steps.issues.outputs.issue_list }}" | grep -E "($commits).*($pattern)")
+          
+          if [[ -n "$matches" ]]; then
+            echo "::set-output name=found::true"
+          else
+            echo "::set-output name=found::false"
+          fi
+
+      - name: Send Slack message
+        if: steps.search.outputs.found == 'true'
+        uses: rtCamp/action-slack-notify@v3
+        with:
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+          channel: '#general'
+          message: 'SEC-123 found in release commits!'
+
