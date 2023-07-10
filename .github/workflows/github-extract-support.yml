@@ -11,7 +11,7 @@ jobs:
       - name: Retrieve commits for release
         id: commits
         run: |
-          git fetch --depth=1 origin +refs/tags/$(git describe --abbrev=0 222^):
+          previous_tag=$(git fetch --depth=1 origin +refs/tags/$(git describe --abbrev=0 222^)):
           echo "::set-output name=commits::$(git log --pretty=format:'%h' --abbrev-commit ${previous_tag}..${{ github.event.release.tag_name }})"
 
       - name: Get correlated issues
