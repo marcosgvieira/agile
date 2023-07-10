@@ -23,3 +23,9 @@ jobs:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
           repository: marcosgvieira/agile
+
+      - name: Run release notes script
+        working-directory: ./issues-reader
+        run: set -o pipefail; ./issues-reader | tee release_notes.txt
+        env:
+          GITHUB_CAMUNDA_ACCESS_TOKEN: ${{ steps.generate-camunda-github-token.outputs.token }}
