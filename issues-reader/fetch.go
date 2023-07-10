@@ -9,6 +9,7 @@ import (
 	"golang.org/x/oauth2"
 	"os"
 	"strings"
+	"strconv"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -77,7 +78,7 @@ func findLinkedIssues(ctx context.Context, client *github.Client, owner, repo st
 // extractLinkedIssuesFromPullRequest extracts the linked GitHub issues from a pull request.
 func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
 	// Retrieve the comments for the pull request
-	log.Debug().Msg("PR: " + pullNumber)
+	log.Debug().Msg("PR: " + strconv.Itoa(pullNumber))
 
 
 	comments, _, err := client.Issues.ListComments(ctx, owner, repo, pullNumber, nil)
