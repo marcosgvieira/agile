@@ -92,7 +92,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 			}
 
 			if(issue != nil) {
-				log.Debug().Msg("so por aqui = " issue.)
+				log.Debug().Msg("so por aqui = " + issue)
 			}
 
 		}
