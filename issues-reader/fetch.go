@@ -66,9 +66,9 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 		// Iterate over the pull requests and retrieve the closed issue numbers
 		for _, pull := range pulls {
-			for _, link := range pull.GetLinks(){
-				log.Debug().Msg("links= " + link)
-			}
+			
+				log.Debug().Msg("links= " + pull.GetLinks().Issue)
+
 
 		}
 	}
