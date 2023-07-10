@@ -136,7 +136,7 @@ func main() {
 		log.Debug().Msg("error = " + err.Error())
 	}
 
-	issues, err := findLinkedIssues(ctx, camundaGithubClient, RepoOwner, "agile", commits)
+	issues, err := extractLinkedIssuesFromPullRequest(ctx, camundaGithubClient, RepoOwner, "agile", commits)
 	if err != nil {
 		log.Debug().Msg("error = " + err.Error())
 	}
