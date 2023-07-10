@@ -28,6 +28,51 @@ type CamundaPlatformRelease struct {
 	IdentityReleaseNotes string
 }
 
+func GetTasklistSupportTickets(ctx context.Context,
+	repoName string,
+	changelogFileName string,
+	repoService *github.RepositoriesService,
+	githubRef string) string {
+
+	opts := github.RepositoryContentGetOptions{
+    		Ref: githubRef,
+    	}
+
+    operateChangeLogReader, response, err := repoService.DownloadContents(ctx,
+		RepoOwner,
+		repoName,
+		changelogFileName,
+		&opts)
+	if err != nil || response.StatusCode != 200 {
+		log.Error().Stack().Err(err).Msg("an error has occurred")
+		os.Exit(1)
+	}
+
+	bytes, err := io.ReadAll(operateChangeLogReader)
+    	if err != nil {
+    		log.Error().Stack().Err(err).Msg("an error has occurred")
+    		os.Exit(1)
+    	}
+    	// operateChangeLogString := string(bytes)
+    	latestReleaseRegex, err := regexp.Compile(`(?s)(?m)# .*?(?:^# )`)
+    	if err != nil {
+    		log.Error().Stack().Err(err).Msg("an error has occurred")
+    		os.Exit(1)
+    	}
+    	mostRecentChangeLog := latestReleaseRegex.Find(bytes)
+    	var firstNewlineIndex int
+    	for i, s := range mostRecentChangeLog {
+    		if s == '\n' {
+    			firstNewlineIndex = i
+    			break
+    		}
+    	}
+
+    	mostRecentChangeLogString := string(mostRecentChangeLog[firstNewlineIndex : len(mostRecentChangeLog)-2])
+    	log.Debug().Msg("mostRecentChangeLog = " + mostRecentChangeLogString)
+        	return mostRecentChangeLogString
+}
+
 func GetChangelogReleaseContents(ctx context.Context,
 	repoName string,
 	changelogFileName string,
@@ -36,6 +81,8 @@ func GetChangelogReleaseContents(ctx context.Context,
 	opts := github.RepositoryContentGetOptions{
 		Ref: githubRef,
 	}
+
+
 
 
 	operateChangeLogReader, response, err := repoService.DownloadContents(ctx,
@@ -106,7 +153,7 @@ func main() {
 
 	log.Debug().Msg("Github ref = " + githubRef)
 
-	tasklistReleaseNotesContents := GetChangelogReleaseContents(
+	GetTasklistSupportTickets (
 		ctx,
 		TasklistRepoName,
 		"CHANGELOG.md",
@@ -114,11 +161,4 @@ func main() {
 		githubRef,
 	)
 
-
-
-	err := temp.Execute(os.Stdout, platformRelease)
-	if err != nil {
-		log.Error().Stack().Err(err).Msg("could not parse template file")
-		os.Exit(1)
-	}
 }
