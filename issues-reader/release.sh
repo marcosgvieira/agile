@@ -3,7 +3,7 @@ set -x -e
 set +o pipefail
 
 export GITHUB_REF_NAME=8.2.3
-export REPO_TO_PUBLISH_TO=camunda/camunda-platform
+export REPO_TO_PUBLISH_TO=marcosgvieira/agile
 
 go build
 
