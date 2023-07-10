@@ -60,7 +60,7 @@ func findLinkedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 		// Iterate over the pull requests and extract the linked issues
 		for _, pull := range pulls {
-			linkedIssues, err := extractLinkedIssuesFromPullRequest(ctx, client, owner, repo, *pull.Number)
+			linkedIssues, err := findClosedIssues(ctx, client, owner, repo, *pull.Number)
 			if err != nil {
 				return nil, err
 			}
@@ -73,27 +73,28 @@ func findLinkedIssues(ctx context.Context, client *github.Client, owner, repo st
 }
 
 
-// extractLinkedIssuesFromPullRequest extracts the linked GitHub issues from a pull request.
-func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
-	// Retrieve the events for the issue
+
+func findClosedIssues(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
+	// Retrieve the events for the pull request
 	events, _, err := client.Issues.ListIssueEvents(ctx, owner, repo, pullNumber, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	// Extract the linked issue numbers from the events
-	linkedIssues := []int{}
+	// Initialize a set to store the closed issue numbers
+	closedIssues := make(map[int]bool)
+
+	// Iterate over the events and check for closed issue events
 	for _, event := range events {
-		if event.Event == "cross-referenced" && event.Source != nil && event.Source.Issue != nil {
-			linkedIssues = append(linkedIssues, *event.Source.Issue.Number)
+		if event.Event == "closed" && event.Issue != nil {
+			closedIssues[*event.Issue.Number] = true
 		}
 	}
 
-	// Retrieve the linked issue details
+	// Retrieve the closed issue details
 	issues := []*github.Issue{}
-	for _, linkedIssue := range linkedIssues {
-		log.Debug().Msg("issue= "+linkedIssue)
-		issue, _, err := client.Issues.Get(ctx, owner, repo, linkedIssue)
+	for closedIssue := range closedIssues {
+		issue, _, err := client.Issues.Get(ctx, owner, repo, closedIssue)
 		if err != nil {
 			return nil, err
 		}
