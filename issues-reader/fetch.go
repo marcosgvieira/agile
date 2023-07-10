@@ -133,7 +133,6 @@ func GetLatestReleaseContents(ctx context.Context,
 }
 
 func main() {
-	var temp = template.Must(template.ParseFiles(ReleaseNotesTemplateFileName))
 
 	camundaTokenSource := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: os.Getenv("GITHUB_CAMUNDA_ACCESS_TOKEN")},
