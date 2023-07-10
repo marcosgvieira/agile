@@ -31,22 +31,6 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 
 	log.Debug().Msg("owner = " + owner + " repo = " + repo + " tag1 = " + tag1 + "tag2 = " + tag2)
 
-	// Get the commit SHAs for the tags
-	ref1, _, err := client.Git.GetRef(ctx, owner, repo, fmt.Sprintf("tags/%s", tag1))
-	if err != nil {
-		return nil, err
-	}
-	sha1 := *ref1.Object.SHA
-	log.Debug().Msg("sha1 = " + sha1)
-
-
-	ref2, _, err := client.Git.GetRef(ctx, owner, repo, fmt.Sprintf("tags/%s", tag2))
-	if err != nil {
-		return nil, err
-	}
-	sha2 := *ref2.Object.SHA
-	log.Debug().Msg("sha2 = " + sha2)
-
 	// Retrieve the commit range between the tags
 	commits, _, err := client.Repositories.CompareCommits(ctx, owner, repo, "111", "222", &github.ListOptions{
 	})
@@ -58,6 +42,80 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 		log.Debug().Msg("Message = " + message)
 	}
 	return commits.Commits, nil
+}
+
+
+func findLinkedIssues(ctx context.Context, client *github.Client, owner, repo string, commits []*github.RepositoryCommit) ([]*github.Issue, error) {
+	// Initialize the list of linked issues
+	issues := []*github.Issue{}
+
+	for _, commit := range commits {
+		// Get the SHA of the commit
+		sha := *commit.SHA
+
+		// Retrieve the pull requests associated with the commit
+		pulls, _, err := client.PullRequests.ListPullRequestsWithCommit(ctx, owner, repo, sha, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		// Iterate over the pull requests and extract the linked issues
+		for _, pull := range pulls {
+			linkedIssues, err := extractLinkedIssuesFromPullRequest(ctx, client, owner, repo, *pull.Number)
+			if err != nil {
+				return nil, err
+			}
+
+			issues = append(issues, linkedIssues...)
+		}
+	}
+
+	return issues, nil
+}
+
+// extractLinkedIssuesFromPullRequest extracts the linked GitHub issues from a pull request.
+func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
+	// Get the pull request information
+	pull, _, err := client.PullRequests.Get(ctx, owner, repo, pullNumber)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Debug().Msg("PR BOdy = " + *pull.Body)
+
+	// Extract the linked issue numbers from the pull request body
+	linkedIssues := findIssuesInMessage(*pull.Body)
+
+	// Retrieve the linked issue details
+	issues := []*github.Issue{}
+	for _, linkedIssue := range linkedIssues {
+		issue, _, err := client.Issues.Get(ctx, owner, repo, linkedIssue)
+		if err != nil {
+			return nil, err
+		}
+
+		issues = append(issues, issue)
+	}
+
+	return issues, nil
+}
+
+// findIssuesInMessage finds the linked GitHub issues in a commit message.
+func findIssuesInMessage(message string) []int {
+	// Initialize the list of linked issues
+	issues := []int{}
+
+	// Search for the issue references in the commit message
+	// This assumes that issue references are in the format "issue/123"
+	words := strings.Fields(message)
+	for _, word := range words {
+		if strings.HasPrefix(word, "issue/") {
+			issueNum := strings.TrimPrefix(word, "issue/")
+			issues = append(issues, issueNumToInt(issueNum))
+		}
+	}
+
+	return issues
 }
 
 func main() {
@@ -86,6 +144,11 @@ func main() {
 		"111",
 		"222",
 		)
+	if err != nil {
+		log.Debug().Msg("error = " + err.Error())
+	}
+
+	issues, err := findLinkedIssues(ctx, camundaGithubClient, RepoOwner, "agile", commits)
 	if err != nil {
 		log.Debug().Msg("error = " + err.Error())
 	}
