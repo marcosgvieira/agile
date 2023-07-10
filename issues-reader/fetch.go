@@ -46,27 +46,29 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 
 
 
-// extractLinkedIssuesFromPullRequest extracts the linked GitHub issues from a pull request.
-func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
-	// Retrieve the events for the issue
-	events, _, err := client.Issues.ListIssueEvents(ctx, owner, repo, pullNumber, nil)
+// findClosedIssues retrieves the closed GitHub issues associated with a pull request.
+func findClosedIssues(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
+	// Retrieve all events in the repository
+	events, _, err := client.Activity.ListRepositoryEvents(ctx, owner, repo, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	// Extract the linked issue numbers from the events
-	linkedIssues := []int{}
+	// Initialize a set to store the closed issue numbers
+	closedIssues := make(map[int]bool)
+
+	// Iterate over the events and check for closed issue events related to the pull request
 	for _, event := range events {
-		if *event.Event == "cross-referenced" && event.GetSource() != nil && event.Source.Issue != nil {
-			linkedIssues = append(linkedIssues, event.GetSource().Issue.Number)
+		if event.Issue != nil && event.Issue.PullRequest != nil && *event.Issue.PullRequest.Number == pullNumber && event.GetEvent() == "closed" {
+			closedIssues[*event.Issue.Number] = true
 		}
 	}
 
-	// Retrieve the linked issue details
+	// Retrieve the closed issue details
 	issues := []*github.Issue{}
-	for _, linkedIssue := range linkedIssues {
-		log.Debug().Msg("linkedIssue " + linkedIssue)
-		issue, _, err := client.Issues.Get(ctx, owner, repo, linkedIssue)
+	for closedIssue := range closedIssues {
+		log.Debug().Msg("closed " + closedIssue)
+		issue, _, err := client.Issues.Get(ctx, owner, repo, closedIssue)
 		if err != nil {
 			return nil, err
 		}
@@ -109,7 +111,7 @@ func main() {
 		log.Debug().Msg("error = " + err.Error())
 	}
 
-	issues, err := extractLinkedIssuesFromPullRequest(ctx, camundaGithubClient, RepoOwner, "agile", commits)
+	issues, err := findClosedIssues(ctx, camundaGithubClient, RepoOwner, "agile", commits)
 	if err != nil {
 		log.Debug().Msg("error = " + err.Error())
 	}
