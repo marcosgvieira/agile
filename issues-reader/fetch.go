@@ -2,13 +2,12 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/google/go-github/v51/github"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
-	"io"
 	"os"
-	"regexp"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -49,7 +48,7 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 	}
 	for _, commit := range commits.Commits {
 		message := *commit.Commit.Message
-		log.Debug().Msg("Message = " + githubRef)
+		log.Debug().Msg("Message = " + message)
 	}
 	return commits.Commits, nil
 }
@@ -68,13 +67,11 @@ func main() {
 
 	camundaGithubClient := github.NewClient(camundaOAuthClient)
 
-	camundaRepoService := camundaGithubClient.Repositories
-
     var githubRef = "222"
 
 	log.Debug().Msg("Github ref = " + githubRef)
 
-	commits := listCommitsBetweenTags(
+	commits, err := listCommitsBetweenTags(
 		ctx,
 		camundaGithubClient,
 		RepoOwner,
