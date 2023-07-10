@@ -38,11 +38,5 @@ jobs:
             echo "::set-output name=found::false"
           fi
 
-      - name: Send Slack message
-        if: steps.search.outputs.found == 'true'
-        uses: rtCamp/action-slack-notify@v3
-        with:
-          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
-          channel: '#general'
-          message: 'SEC-123 found in release commits!'
+     
 
