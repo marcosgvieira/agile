@@ -82,7 +82,7 @@ func main() {
 		"222",
 		)
 	if err != nil {
-		log.Debug().Msg("error = %v", err)
+		log.Debug().Msg("error = " + err.Error())
 	}
 
 	if(commits != nil) {
