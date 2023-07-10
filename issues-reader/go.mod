@@ -1,4 +1,4 @@
-module github.com/camunda/camunda-platform/release-notes-fetcher
+module github.com/marcosgvieira/agile/issues-reader
 
 go 1.19
 
