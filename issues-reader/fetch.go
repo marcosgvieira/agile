@@ -7,6 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"os"
+	"strconv"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -93,7 +94,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 	// Retrieve the closed issue details
 	issues := []*github.Issue{}
 	for closedIssue := range closedIssues {
-		log.Debug().Msg("closedIssue = " + closedIssue)
+		log.Debug().Msg("closedIssue = " + strconv.Itoa(closedIssue))
 		issue, _, err := client.Issues.Get(ctx, owner, repo, closedIssue)
 		if err != nil {
 			return nil, err
