@@ -102,7 +102,7 @@ func main() {
 
 	camundaRepoService := camundaGithubClient.Repositories
 
-    gitHubRef = "222"
+    var gitHubRef = "222"
 
 	log.Debug().Msg("Github ref = " + githubRef)
 
