@@ -7,7 +7,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"os"
-	"strconv"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -45,33 +44,7 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 }
 
 
-func findLinkedIssues(ctx context.Context, client *github.Client, owner, repo string, commits []*github.RepositoryCommit) ([]*github.Issue, error) {
-	// Initialize the list of linked issues
-	issues := []*github.Issue{}
 
-	for _, commit := range commits {
-		// Get the SHA of the commit
-		sha := *commit.SHA
-
-		// Retrieve the pull requests associated with the commit
-		pulls, _, err := client.PullRequests.ListPullRequestsWithCommit(ctx, owner, repo, sha, nil)
-		if err != nil {
-			return nil, err
-		}
-
-		// Iterate over the pull requests and extract the linked issues
-		for _, pull := range pulls {
-			linkedIssues, err := findClosedIssues(ctx, client, owner, repo, *pull.Number)
-			if err != nil {
-				return nil, err
-			}
-
-			issues = append(issues, linkedIssues...)
-		}
-	}
-
-	return issues, nil
-}
 
 // extractLinkedIssuesFromPullRequest extracts the linked GitHub issues from a pull request.
 func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
@@ -84,8 +57,8 @@ func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Clie
 	// Extract the linked issue numbers from the events
 	linkedIssues := []int{}
 	for _, event := range events {
-		if *event.Event == "cross-referenced" && event.Source != nil && event.Source.Issue != nil {
-			linkedIssues = append(linkedIssues, *event.Source.Issue.Number)
+		if *event.Event == "cross-referenced" && event.GetSource() != nil && event.Source.Issue != nil {
+			linkedIssues = append(linkedIssues, event.GetSource().Issue.Number)
 		}
 	}
 
