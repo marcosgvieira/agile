@@ -2,14 +2,12 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/google/go-github/v51/github"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"os"
 	"strings"
-	"strconv"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -77,20 +75,17 @@ func findLinkedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 // extractLinkedIssuesFromPullRequest extracts the linked GitHub issues from a pull request.
 func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
-	// Retrieve the comments for the pull request
-	log.Debug().Msg("PR: " + strconv.Itoa(pullNumber))
-
-
-	comments, _, err := client.Issues.ListComments(ctx, owner, repo, pullNumber, nil)
+	// Get the pull request information
+	pull, _, err := client.PullRequests.Get(ctx, owner, repo, pullNumber)
 	if err != nil {
 		return nil, err
 	}
 
-	// Extract the linked issue numbers from the comments
+	// Extract the linked issue numbers from the pull request's linked issues
 	linkedIssues := []int{}
-	for _, comment := range comments {
-		log.Debug().Msg("aqui: " + *comment.Body)
-		linkedIssues = append(linkedIssues, findIssuesInMessage(*comment.Body)...)
+	for _, linkedIssue := range pull.LinkedIssues {
+		log.Debug().msg("linkedIssue: " + linkedIssue)
+		linkedIssues = append(linkedIssues, *linkedIssue.IssueNumber)
 	}
 
 	// Retrieve the linked issue details
@@ -105,33 +100,6 @@ func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Clie
 	}
 
 	return issues, nil
-}
-
-// findIssuesInMessage finds the linked GitHub issues in a commit message.
-func findIssuesInMessage(message string) []int {
-	// Initialize the list of linked issues
-	issues := []int{}
-
-	// Search for the issue references in the commit message
-	// This assumes that issue references are in the format "issue/123"
-	words := strings.Fields(message)
-	for _, word := range words {
-		if strings.HasPrefix(word, "issue/") {
-			issueNum := strings.TrimPrefix(word, "issue/")
-			issues = append(issues, issueNumToInt(issueNum))
-		}
-	}
-
-	return issues
-}
-
-
-func issueNumToInt(issueNum string) int {
-	// Convert the string to an integer
-	// Add error handling if needed
-	issueInt := 0
-	fmt.Sscanf(issueNum, "%d", &issueInt)
-	return issueInt
 }
 
 func main() {
