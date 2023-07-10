@@ -28,6 +28,7 @@ type CamundaPlatformRelease struct {
 
 
 func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, repo, tag1, tag2 string) ([]*github.RepositoryCommit, error) {
+
 	// Get the commit SHAs for the tags
 	ref1, _, err := client.Git.GetRef(ctx, owner, repo, fmt.Sprintf("tags/%s", tag1))
 	if err != nil {
@@ -42,7 +43,9 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 	sha2 := *ref2.Object.SHA
 
 	// Retrieve the commit range between the tags
-	commits, _, err := client.Repositories.CompareCommits(ctx, owner, repo, sha1, sha2)
+	commits, _, err := client.Repositories.CompareCommits(ctx, owner, repo, "", sha2, &github.CommitsListOptions{
+		Base: sha1,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +82,10 @@ func main() {
 		"111",
 		"222",
 		)
+	if err != nil {
+		log.Fatalf("Error retrieving commits: %v", err)
+	}
 
-
+	log.Debug().Msg("commits = " + commits)
 
 }
