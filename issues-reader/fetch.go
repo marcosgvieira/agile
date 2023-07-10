@@ -43,7 +43,7 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 	sha2 := *ref2.Object.SHA
 
 	// Retrieve the commit range between the tags
-	commits, _, err := client.Repositories.CompareCommits(ctx, owner, repo, "", sha2, &github.ListOptions{
+	commits, _, err := client.Repositories.CompareCommits(ctx, owner, repo, sha1, sha2, &github.ListOptions{
 	})
 	if err != nil {
 		return nil, err
