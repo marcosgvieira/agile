@@ -102,23 +102,9 @@ func main() {
 
 	camundaRepoService := camundaGithubClient.Repositories
 
+    gitHubRef = "222"
+
 	log.Debug().Msg("Github ref = " + githubRef)
-
-	zeebeReleaseNotes := GetLatestReleaseContents(
-		ctx,
-		RepoOwner,
-		ZeebeRepoName,
-		camundaRepoService,
-		githubRef,
-	)
-
-	operateReleaseNotesContents := GetChangelogReleaseContents(
-		ctx,
-		OperateRepoName,
-		"CHANGELOG.md",
-		camundaRepoService,
-		githubRef,
-	)
 
 	tasklistReleaseNotesContents := GetChangelogReleaseContents(
 		ctx,
@@ -128,27 +114,7 @@ func main() {
 		githubRef,
 	)
 
-	camundaCloudTokenSource := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: os.Getenv("GITHUB_CAMUNDA_CLOUD_ACCESS_TOKEN")},
-	)
-	camundaCloudOAuthClient := oauth2.NewClient(ctx, camundaCloudTokenSource)
-	camundaCloudGithubClient := github.NewClient(camundaCloudOAuthClient)
-	camundaCloudRepoService := camundaCloudGithubClient.Repositories
 
-	identityReleaseNotesContents := GetLatestReleaseContents(
-		ctx,
-		CloudRepoOwner,
-		IdentityRepoName,
-		camundaCloudRepoService,
-		githubRef,
-	)
-
-	platformRelease := CamundaPlatformRelease{
-		ZeebeReleaseNotes:    zeebeReleaseNotes,
-		OperateReleaseNotes:  operateReleaseNotesContents,
-		TasklistReleaseNotes: tasklistReleaseNotesContents,
-		IdentityReleaseNotes: identityReleaseNotesContents,
-	}
 
 	err := temp.Execute(os.Stdout, platformRelease)
 	if err != nil {
