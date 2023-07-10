@@ -73,32 +73,27 @@ func findLinkedIssues(ctx context.Context, client *github.Client, owner, repo st
 	return issues, nil
 }
 
-// findClosedIssues retrieves the closed GitHub issues associated with a pull request.
-func findClosedIssues(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
-	// Retrieve the events for the pull request
+// extractLinkedIssuesFromPullRequest extracts the linked GitHub issues from a pull request.
+func extractLinkedIssuesFromPullRequest(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
+	// Retrieve the events for the issue
 	events, _, err := client.Issues.ListIssueEvents(ctx, owner, repo, pullNumber, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	// Initialize a set to store the closed issue numbers
-	closedIssues := make(map[int]bool)
-
-	// Iterate over the events and check for closed issue events
+	// Extract the linked issue numbers from the events
+	linkedIssues := []int{}
 	for _, event := range events {
-		log.Debug().Msg("event = " + *event.Event)
-
-		if event.Event != nil && *event.Event == "closed" && event.Issue != nil {
-			log.Debug().Msg("nummmmber = " + strconv.Itoa(*event.Issue.Number))
-			closedIssues[*event.Issue.Number] = true
+		if *event.Event == "cross-referenced" && event.Source != nil && event.Source.Issue != nil {
+			linkedIssues = append(linkedIssues, *event.Source.Issue.Number)
 		}
 	}
 
-	// Retrieve the closed issue details
+	// Retrieve the linked issue details
 	issues := []*github.Issue{}
-	for closedIssue := range closedIssues {
-		log.Debug().Msg("closedIssue = " + strconv.Itoa(closedIssue))
-		issue, _, err := client.Issues.Get(ctx, owner, repo, closedIssue)
+	for _, linkedIssue := range linkedIssues {
+		log.Debug().Msg("linkedIssue " + linkedIssue)
+		issue, _, err := client.Issues.Get(ctx, owner, repo, linkedIssue)
 		if err != nil {
 			return nil, err
 		}
@@ -108,6 +103,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 	return issues, nil
 }
+
 
 
 func main() {
