@@ -37,7 +37,7 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 		return nil, err
 	}
 	sha1 := *ref1.Object.SHA
-	log.Debug().Msg("sha1 = " sha1)
+	log.Debug().Msg("sha1 = " + sha1)
 
 
 	ref2, _, err := client.Git.GetRef(ctx, owner, repo, fmt.Sprintf("tags/%s", tag2))
@@ -45,7 +45,7 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 		return nil, err
 	}
 	sha2 := *ref2.Object.SHA
-	log.Debug().Msg("sha2 = " sha2)
+	log.Debug().Msg("sha2 = " + sha2)
 
 	// Retrieve the commit range between the tags
 	commits, _, err := client.Repositories.CompareCommits(ctx, owner, repo, "111", "222", &github.ListOptions{
