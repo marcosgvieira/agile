@@ -28,48 +28,21 @@ type CamundaPlatformRelease struct {
 }
 
 func GetTasklistSupportTickets(ctx context.Context,
+	orgName string,
 	repoName string,
-	changelogFileName string,
 	repoService *github.RepositoriesService,
 	githubRef string) string {
 
-	opts := github.RepositoryContentGetOptions{
-    		Ref: githubRef,
-    	}
+	githubRelease, response, err := repoService.GetReleaseByTag(ctx, orgName, repoName, githubRef)
 
-    operateChangeLogReader, response, err := repoService.DownloadContents(ctx,
-		RepoOwner,
-		repoName,
-		changelogFileName,
-		&opts)
 	if err != nil || response.StatusCode != 200 {
-		log.Error().Stack().Err(err).Msg("an error has occurred")
+		log.Error().Stack().Err(err).Msg("An error has occurred")
 		os.Exit(1)
 	}
+	log.Debug().Msg("mostRecentChangeLog = " + *githubRelease.Body)
+	return *githubRelease.Body
 
-	bytes, err := io.ReadAll(operateChangeLogReader)
-    	if err != nil {
-    		log.Error().Stack().Err(err).Msg("an error has occurred")
-    		os.Exit(1)
-    	}
-    	// operateChangeLogString := string(bytes)
-    	latestReleaseRegex, err := regexp.Compile(`(?s)(?m)# .*?(?:^# )`)
-    	if err != nil {
-    		log.Error().Stack().Err(err).Msg("an error has occurred")
-    		os.Exit(1)
-    	}
-    	mostRecentChangeLog := latestReleaseRegex.Find(bytes)
-    	var firstNewlineIndex int
-    	for i, s := range mostRecentChangeLog {
-    		if s == '\n' {
-    			firstNewlineIndex = i
-    			break
-    		}
-    	}
 
-    	mostRecentChangeLogString := string(mostRecentChangeLog[firstNewlineIndex : len(mostRecentChangeLog)-2])
-    	log.Debug().Msg("mostRecentChangeLog = " + mostRecentChangeLogString)
-        	return mostRecentChangeLogString
 }
 
 func GetChangelogReleaseContents(ctx context.Context,
@@ -153,8 +126,8 @@ func main() {
 
 	GetTasklistSupportTickets (
 		ctx,
-		"agile",
-		"CHANGELOG.md",
+		RepoOwner,
+		ZeebeRepoName,
 		camundaRepoService,
 		githubRef,
 	)
