@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"os"
+	"strings"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -118,6 +119,15 @@ func findIssuesInMessage(message string) []int {
 	return issues
 }
 
+
+func issueNumToInt(issueNum string) int {
+	// Convert the string to an integer
+	// Add error handling if needed
+	issueInt := 0
+	fmt.Sscanf(issueNum, "%d", &issueInt)
+	return issueInt
+}
+
 func main() {
 
 	camundaTokenSource := oauth2.StaticTokenSource(
@@ -151,6 +161,10 @@ func main() {
 	issues, err := findLinkedIssues(ctx, camundaGithubClient, RepoOwner, "agile", commits)
 	if err != nil {
 		log.Debug().Msg("error = " + err.Error())
+	}
+
+	if(issues != nil){
+		log.Debug().Msg("issues = ")
 	}
 
 	if(commits != nil) {
