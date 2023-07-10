@@ -7,7 +7,9 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"os"
+	"strings"
 	"strconv"
+	"urlpkg"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -67,7 +69,10 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 		// Iterate over the pull requests and retrieve the closed issue numbers
 		for _, pull := range pulls {
-			log.Debug().Msg(pull.GetLinks())
+			for _, link := range pull.getLinks(){
+				log.Debug().Msg("links= " + link)
+			}
+
 		}
 	}
 
