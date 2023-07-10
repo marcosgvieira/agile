@@ -57,15 +57,18 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 		sha := *commit.SHA
 
 		// Retrieve the pull requests associated with the commit
-		pulls, _, err := client.PullRequests.ListPullRequestsWithCommit(ctx, owner, repo, sha, nil)
+		pulls, _, err := client.PullRequests.List(ctx, owner, repo, &github.PullRequestListOptions{
+			State: "closed",
+			Head:  sha,
+		})
 		if err != nil {
 			return nil, err
 		}
 
 		// Iterate over the pull requests and retrieve the closed issue numbers
 		for _, pull := range pulls {
-			if pull.GetMerged() && pull.GetIssue() != nil {
-				closedIssues[*pull.GetIssue().Number] = true
+			if pull.GetMerged() && pull.Issue != nil {
+				closedIssues[*pull.Issue.Number] = true
 			}
 		}
 	}
@@ -84,6 +87,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 	return issues, nil
 }
+
 
 // extractIssueNumberFromURL extracts the issue number from the issue URL.
 func extractIssueNumberFromURL(url string) (int, error) {
