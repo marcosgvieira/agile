@@ -11,9 +11,9 @@ import (
 	"regexp"
 )
 
-const RepoOwner = "camunda"
+const RepoOwner = "marcosgvieira"
 const CloudRepoOwner = "camunda-cloud"
-const MainRepoName = "camunda-platform"
+const MainRepoName = "agile"
 const ZeebeRepoName = "zeebe"
 const OperateRepoName = "operate"
 const TasklistRepoName = "tasklist"
@@ -153,7 +153,7 @@ func main() {
 
 	GetTasklistSupportTickets (
 		ctx,
-		TasklistRepoName,
+		"agile",
 		"CHANGELOG.md",
 		camundaRepoService,
 		githubRef,
