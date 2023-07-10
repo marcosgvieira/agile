@@ -9,7 +9,6 @@ import (
 	"io"
 	"os"
 	"regexp"
-	"text/template"
 )
 
 const RepoOwner = "camunda"
