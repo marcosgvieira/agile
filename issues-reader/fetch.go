@@ -87,8 +87,9 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 	// Iterate over the events and check for closed issue events
 	for _, event := range events {
 		log.Debug().Msg("event = " + *event.Event)
-		log.Debug().Msg("event = " + strconv.Itoa(*event.Issue.Number))
+
 		if event.Event != nil && *event.Event == "closed" && event.Issue != nil {
+			log.Debug().Msg("event = " + strconv.Itoa(*event.Issue.Number))
 			closedIssues[*event.Issue.Number] = true
 		}
 	}
