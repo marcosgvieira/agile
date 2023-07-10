@@ -9,7 +9,6 @@ import (
 	"os"
 	"strings"
 	"strconv"
-	"urlpkg"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -92,25 +91,6 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 }
 
 
-// extractIssueNumberFromURL extracts the issue number from the issue URL.
-func extractIssueNumberFromURL(url string) (int, error) {
-	// Parse the URL
-	parsedURL, err := urlpkg.Parse(url)
-	if err != nil {
-		return 0, err
-	}
-
-	// Get the path segments
-	segments := strings.Split(parsedURL.Path, "/")
-
-	// Get the issue number
-	issueNumber, err := strconv.Atoi(segments[len(segments)-1])
-	if err != nil {
-		return 0, err
-	}
-
-	return issueNumber, nil
-}
 
 
 
