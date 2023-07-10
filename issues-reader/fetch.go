@@ -48,8 +48,8 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 
 // findClosedIssues retrieves the closed GitHub issues associated with a pull request.
 func findClosedIssues(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
-	// Retrieve all events in the repository
-	events, _, err := client.Activity.ListRepositoryEvents(ctx, owner, repo, nil)
+	// Retrieve the events for the pull request
+	events, _, err := client.Issues.ListIssueEvents(ctx, owner, repo, pullNumber, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -57,9 +57,9 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 	// Initialize a set to store the closed issue numbers
 	closedIssues := make(map[int]bool)
 
-	// Iterate over the events and check for closed issue events related to the pull request
+	// Iterate over the events and check for closed issue events
 	for _, event := range events {
-		if event.Issue != nil && event.Issue.PullRequest != nil && *event.Issue.PullRequest.Number == pullNumber && event.GetEvent() == "closed" {
+		if event.GetEvent() == "closed" && event.Issue != nil {
 			closedIssues[*event.Issue.Number] = true
 		}
 	}
