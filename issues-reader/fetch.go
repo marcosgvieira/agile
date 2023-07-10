@@ -72,8 +72,7 @@ func findLinkedIssues(ctx context.Context, client *github.Client, owner, repo st
 	return issues, nil
 }
 
-
-
+// findClosedIssues retrieves the closed GitHub issues associated with a pull request.
 func findClosedIssues(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
 	// Retrieve the events for the pull request
 	events, _, err := client.Issues.ListIssueEvents(ctx, owner, repo, pullNumber, nil)
@@ -86,7 +85,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 	// Iterate over the events and check for closed issue events
 	for _, event := range events {
-		if event.Event == "closed" && event.Issue != nil {
+		if event.Event != nil && *event.Event == "closed" && event.Issue != nil {
 			closedIssues[*event.Issue.Number] = true
 		}
 	}
