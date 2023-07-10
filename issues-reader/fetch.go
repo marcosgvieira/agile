@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/google/go-github/v51/github"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"os"
 	"strconv"
+	"strings"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -73,13 +75,16 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 				return nil, err
 			}
 
-			log.Debug().Msg("links= " + issueNumber)
+			log.Debug().Msg("links= " + strconv.Atoi(issueNumber))
 			// Retrieve the issue details
 			issue, _, err := client.Issues.Get(ctx, owner, repo, issueNumber)
 			if err != nil {
 				return nil, err
 			}
 
+			if(issue != nil) {
+				log.Debug().Msg("so por aqui")
+			}
 
 		}
 	}
