@@ -7,6 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"os"
+	"strconv"
 )
 
 const RepoOwner = "marcosgvieira"
@@ -45,30 +46,41 @@ func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, r
 
 
 
-
-// findClosedIssues retrieves the closed GitHub issues associated with a pull request.
-func findClosedIssues(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
-	// Retrieve the events for the pull request
-	events, _, err := client.Issues.ListIssueEvents(ctx, owner, repo, pullNumber, nil)
-	if err != nil {
-		return nil, err
-	}
-
+// findClosedIssues retrieves the closed GitHub issues associated with the given commits.
+func findClosedIssues(ctx context.Context, client *github.Client, owner, repo string, commits []*github.RepositoryCommit) ([]*github.Issue, error) {
 	// Initialize a set to store the closed issue numbers
 	closedIssues := make(map[int]bool)
 
-	// Iterate over the events and check for closed issue events
-	for _, event := range events {
-		if event.GetEvent() == "closed" && event.Issue != nil {
-			closedIssues[*event.Issue.Number] = true
+	// Iterate over the commits and retrieve the associated pull requests
+	for _, commit := range commits {
+		// Get the SHA of the commit
+		sha := *commit.SHA
+
+		// Retrieve the pull requests associated with the commit
+		pulls, _, err := client.PullRequests.ListPullRequestsWithCommit(ctx, owner, repo, sha, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		// Iterate over the pull requests and retrieve the closed issue numbers
+		for _, pull := range pulls {
+			if pull.GetMerged() {
+				closedIssues[pull.GetIssueURL()] = true
+			}
 		}
 	}
 
 	// Retrieve the closed issue details
 	issues := []*github.Issue{}
-	for closedIssue := range closedIssues {
-		log.Debug().Msg("closed " + closedIssue)
-		issue, _, err := client.Issues.Get(ctx, owner, repo, closedIssue)
+	for url := range closedIssues {
+		// Extract the issue number from the issue URL
+		issueNumber, err := extractIssueNumberFromURL(url)
+		if err != nil {
+			return nil, err
+		}
+
+		// Retrieve the closed issue
+		issue, _, err := client.Issues.Get(ctx, owner, repo, issueNumber)
 		if err != nil {
 			return nil, err
 		}
@@ -77,6 +89,26 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 	}
 
 	return issues, nil
+}
+
+// extractIssueNumberFromURL extracts the issue number from the issue URL.
+func extractIssueNumberFromURL(url string) (int, error) {
+	// Parse the URL
+	parsedURL, err := urlpkg.Parse(url)
+	if err != nil {
+		return 0, err
+	}
+
+	// Get the path segments
+	segments := strings.Split(parsedURL.Path, "/")
+
+	// Get the issue number
+	issueNumber, err := strconv.Atoi(segments[len(segments)-1])
+	if err != nil {
+		return 0, err
+	}
+
+	return issueNumber, nil
 }
 
 
