@@ -16,10 +16,14 @@ jobs:
 
       - name: Get correlated issues
         id: issues
-        uses: gavinr/github-issues-action@v1
+        uses: octokit/request-action@v2.x
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commits: ${{ steps.commits.outputs.commits }}
+          route: GET /repos/${{ github.repository }}/issues
+          headers: |
+            authorization: token ${{ secrets.GITHUB_TOKEN }}
+          query: |
+            q=sha:(${{ steps.commits.outputs.commits }})
+
 
       - name: Search for SEC-123
         id: search
