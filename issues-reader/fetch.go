@@ -27,81 +27,31 @@ type CamundaPlatformRelease struct {
 	IdentityReleaseNotes string
 }
 
-func GetTasklistSupportTickets(ctx context.Context,
-	orgName string,
-	repoName string,
-	repoService *github.RepositoriesService,
-	githubRef string) string {
 
-	githubRelease, response, err := repoService.GetReleaseByTag(ctx, orgName, repoName, githubRef)
-
-	if err != nil || response.StatusCode != 200 {
-		log.Error().Stack().Err(err).Msg("An error has occurred")
-		os.Exit(1)
-	}
-	log.Debug().Msg("mostRecentChangeLog = " + *githubRelease.Body)
-	return *githubRelease.Body
-
-
-}
-
-func GetChangelogReleaseContents(ctx context.Context,
-	repoName string,
-	changelogFileName string,
-	repoService *github.RepositoriesService,
-	githubRef string) string {
-	opts := github.RepositoryContentGetOptions{
-		Ref: githubRef,
-	}
-
-
-
-
-	operateChangeLogReader, response, err := repoService.DownloadContents(ctx,
-		RepoOwner,
-		repoName,
-		changelogFileName,
-		&opts)
-	if err != nil || response.StatusCode != 200 {
-		log.Error().Stack().Err(err).Msg("an error has occurred")
-		os.Exit(1)
-	}
-
-	bytes, err := io.ReadAll(operateChangeLogReader)
+func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, repo, tag1, tag2 string) ([]*github.RepositoryCommit, error) {
+	// Get the commit SHAs for the tags
+	ref1, _, err := client.Git.GetRef(ctx, owner, repo, fmt.Sprintf("tags/%s", tag1))
 	if err != nil {
-		log.Error().Stack().Err(err).Msg("an error has occurred")
-		os.Exit(1)
+		return nil, err
 	}
-	// operateChangeLogString := string(bytes)
-	latestReleaseRegex, err := regexp.Compile(`(?s)(?m)# .*?(?:^# )`)
+	sha1 := *ref1.Object.SHA
+
+	ref2, _, err := client.Git.GetRef(ctx, owner, repo, fmt.Sprintf("tags/%s", tag2))
 	if err != nil {
-		log.Error().Stack().Err(err).Msg("an error has occurred")
-		os.Exit(1)
+		return nil, err
 	}
-	mostRecentChangeLog := latestReleaseRegex.Find(bytes)
-	var firstNewlineIndex int
-	for i, s := range mostRecentChangeLog {
-		if s == '\n' {
-			firstNewlineIndex = i
-			break
-		}
-	}
-	mostRecentChangeLogString := string(mostRecentChangeLog[firstNewlineIndex : len(mostRecentChangeLog)-2])
-	return mostRecentChangeLogString
-}
+	sha2 := *ref2.Object.SHA
 
-func GetLatestReleaseContents(ctx context.Context,
-	orgName string,
-	repoName string,
-	repoService *github.RepositoriesService,
-	githubRef string) string {
-
-	githubRelease, response, err := repoService.GetReleaseByTag(ctx, orgName, repoName, githubRef)
-	if err != nil || response.StatusCode != 200 {
-		log.Error().Stack().Err(err).Msg("An error has occurred")
-		os.Exit(1)
+	// Retrieve the commit range between the tags
+	commits, _, err := client.Repositories.CompareCommits(ctx, owner, repo, sha1, sha2)
+	if err != nil {
+		return nil, err
 	}
-	return *githubRelease.Body
+	for _, commit := range commits.Commits {
+		message := *commit.Commit.Message
+		log.Debug().Msg("Message = " + githubRef)
+	}
+	return commits.Commits, nil
 }
 
 func main() {
@@ -124,12 +74,15 @@ func main() {
 
 	log.Debug().Msg("Github ref = " + githubRef)
 
-	GetTasklistSupportTickets (
+	commits := listCommitsBetweenTags(
 		ctx,
+		camundaGithubClient,
 		RepoOwner,
-		"agile",
-		camundaRepoService,
-		githubRef,
-	)
+		"agile"
+		"111",
+		"222"
+		)
+
+
 
 }
