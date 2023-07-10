@@ -29,7 +29,7 @@ type CamundaPlatformRelease struct {
 
 func listCommitsBetweenTags(ctx context.Context, client *github.Client, owner, repo, tag1, tag2 string) ([]*github.RepositoryCommit, error) {
 
-	log.Debug().Msg("owner = " + owner + " repo = " + repo + " tag1 = " + tag1 + "tag2 = " tag2)
+	log.Debug().Msg("owner = " + owner + " repo = " + repo + " tag1 = " + tag1 + "tag2 = " + tag2)
 
 	// Get the commit SHAs for the tags
 	ref1, _, err := client.Git.GetRef(ctx, owner, repo, fmt.Sprintf("tags/%s", tag1))
