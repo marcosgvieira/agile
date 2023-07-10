@@ -127,7 +127,7 @@ func main() {
 	GetTasklistSupportTickets (
 		ctx,
 		RepoOwner,
-		ZeebeRepoName,
+		"agile",
 		camundaRepoService,
 		githubRef,
 	)
