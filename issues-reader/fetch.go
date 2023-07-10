@@ -69,7 +69,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 		// Iterate over the pull requests and retrieve the closed issue numbers
 		for _, pull := range pulls {
-			refIssues, err := getReferencingIssues(ctx, client, owner, repo, pull.GetId())
+			refIssues, err := getReferencingIssues(ctx, client, owner, repo, pull.GetID())
 			if(refIssues != nil){
 				log.Debug().Msg("refIssues")
 			}
@@ -92,7 +92,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 			}
 
 			if(issue != nil) {
-				log.Debug().Msg("so por aqui = " + issue)
+				log.Debug().Msg("so por aqui = ")
 			}
 
 		}
@@ -117,7 +117,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 // getReferencingIssues retrieves the issues that made references to a pull request.
 func getReferencingIssues(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
 	// Retrieve the comments for the pull request
-	comments, _, err := client.Issues.ListIssueComments(ctx, owner, repo, pullNumber, nil)
+	comments, _, err := client.Issues.ListComments(ctx, owner, repo, pullNumber, nil)
 	if err != nil {
 		return nil, err
 	}
