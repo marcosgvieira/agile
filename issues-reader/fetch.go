@@ -75,7 +75,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 				return nil, err
 			}
 
-			log.Debug().Msg("links= " + strconv.Atoi(issueNumber))
+			log.Debug().Msg("links= " + strconv.Itoa(issueNumber))
 			// Retrieve the issue details
 			issue, _, err := client.Issues.Get(ctx, owner, repo, issueNumber)
 			if err != nil {
