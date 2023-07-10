@@ -69,6 +69,15 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 		// Iterate over the pull requests and retrieve the closed issue numbers
 		for _, pull := range pulls {
+			refIssues, err := getReferencingIssues(ctx, client, owner, repo, pull.GetId())
+			if(refIssues != nil){
+				log.Debug().Msg("refIssues")
+			}
+			if(err != nil){
+				log.Debug().Msg("err")
+			}
+
+
 			issueURL := pull.GetIssueURL()
 			issueNumber, err := extractIssueNumberFromURL(issueURL)
 			if err != nil {
@@ -83,7 +92,7 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 			}
 
 			if(issue != nil) {
-				log.Debug().Msg("so por aqui")
+				log.Debug().Msg("so por aqui = " issue.)
 			}
 
 		}
@@ -103,6 +112,80 @@ func findClosedIssues(ctx context.Context, client *github.Client, owner, repo st
 
 	return issues, nil
 }
+
+
+// getReferencingIssues retrieves the issues that made references to a pull request.
+func getReferencingIssues(ctx context.Context, client *github.Client, owner, repo string, pullNumber int) ([]*github.Issue, error) {
+	// Retrieve the comments for the pull request
+	comments, _, err := client.Issues.ListIssueComments(ctx, owner, repo, pullNumber, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Initialize a set to store the referencing issue numbers
+	referencingIssues := make(map[int]bool)
+
+	// Iterate over the comments and check for references to other issues
+	for _, comment := range comments {
+		// Parse the comment body to find references to other issues
+		references := parseReferences(comment.GetBody())
+
+		// Iterate over the references and extract the issue numbers
+		for _, reference := range references {
+			issueNumber, err := extractIssueNumberFromReference(reference)
+			if err == nil {
+				referencingIssues[issueNumber] = true
+			}
+		}
+	}
+
+	// Retrieve the referencing issue details
+	issues := []*github.Issue{}
+	for referencingIssue := range referencingIssues {
+		issue, _, err := client.Issues.Get(ctx, owner, repo, referencingIssue)
+		if err != nil {
+			return nil, err
+		}
+
+		issues = append(issues, issue)
+	}
+
+	return issues, nil
+}
+
+// parseReferences extracts references to other issues from a comment body.
+func parseReferences(body string) []string {
+	references := make([]string, 0)
+
+	// Regular expression pattern to match references to other issues
+	pattern := `#(\d+)`
+
+	// Compile the regular expression pattern
+	re := regexp.MustCompile(pattern)
+
+	// Find all matches in the comment body
+	matches := re.FindAllStringSubmatch(body, -1)
+
+	// Extract the matched references
+	for _, match := range matches {
+		if len(match) > 1 {
+			references = append(references, match[1])
+		}
+	}
+
+	return references
+}
+
+// extractIssueNumberFromReference extracts the issue number from a reference string.
+func extractIssueNumberFromReference(reference string) (int, error) {
+	issueNumber, err := strconv.Atoi(reference)
+	if err != nil {
+		return 0, err
+	}
+
+	return issueNumber, nil
+}
+
 
 // Extract the issue number from the issue URL
 func extractIssueNumberFromURL(url string) (int, error) {
