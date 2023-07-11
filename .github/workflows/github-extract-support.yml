@@ -1,31 +1,40 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
+
 jobs:
-  Explore-GitHub-Actions:
+  check-commits:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Setup Go
-        uses: actions/setup-go@v4
+      - name: Retrieve commits for release
+        id: commits
+        run: |
+          previous_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))
+          echo "::set-output name=commits::$(git log --pretty=format:'%h' --abbrev-commit ${previous_tag}..${{ github.event.release.tag_name }})"
+
+      - name: Get correlated issues
+        id: issues
+        uses: octokit/request-action@v2.x
         with:
-          go-version: "1.20"
+          route: GET /repos/${{ github.repository }}/issues
+          headers: |
+            authorization: token ${{ secrets.GITHUB_TOKEN }}
+          query: |
+            q=sha:(${{ steps.commits.outputs.commits }})
 
-      - name: Build
-        working-directory: ./issues-reader
-        run: go build
+      - name: Search for SEC-123
+        id: search
+        run: |
+          pattern="SEC-123"
+          matches=$(echo "${{ steps.issues.outputs.data }}" | jq -r '.[].body' | grep "$pattern")
 
-      - name: Generate token for Camunda GitHub org
-        id: generate-camunda-github-token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
-          repository: marcosgvieira/agile
+          if [[ -n "$matches" ]]; then
+            echo "::set-output name=found::true"
+          else
+            echo "::set-output name=found::false"
+          fi
 
-      - name: Run release notes script
-        working-directory: ./issues-reader
-        run: set -o pipefail; ./issues-reader | tee release_notes.txt
-        env:
-          GITHUB_CAMUNDA_ACCESS_TOKEN: ${{ steps.generate-camunda-github-token.outputs.token }}
