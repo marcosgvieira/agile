@@ -18,13 +18,22 @@ jobs:
           previous_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))
           echo "::set-output name=commits::$(git log --pretty=format:'%h' --abbrev-commit ${previous_tag}..${{ github.event.release.tag_name }})"
 
+      - name: Generate token for Camunda GitHub org
+        id: generate-camunda-github-token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          repository: marcosgvieira/agile
+
+
       - name: Get correlated issues
         id: issues
         uses: octokit/request-action@v2.x
         with:
           route: GET /repos/${{ github.repository }}/issues
           headers: |
-            authorization: token ${{ secrets.GITHUB_TOKEN }}
+            authorization: token ${{ steps.generate-camunda-github-token.outputs.token }}
           query: |
             q=sha:(${{ steps.commits.outputs.commits }})
 
