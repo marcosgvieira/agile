@@ -42,7 +42,7 @@ jobs:
         id: search
         run: |
           pattern="SEC-123"
-          matches=$(echo "${{ steps.issues.outputs.data }}" | jq -r '.[].body' | grep "$pattern")
+          matches="${{ steps.issues.outputs.data }}" | jq -r '.[].body' | grep "$pattern"
 
           if [[ -n "$matches" ]]; then
             echo "::set-output name=found::true"
