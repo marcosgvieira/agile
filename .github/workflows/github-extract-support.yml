@@ -31,6 +31,7 @@ jobs:
         id: issues
         uses: octokit/request-action@v2.x
         with:
+          GITHUB_TOKEN: ${{ steps.generate-camunda-github-token.outputs.token }}
           route: GET /repos/${{ github.repository }}/issues
           headers: |
             authorization: token ${{ steps.generate-camunda-github-token.outputs.token }}
