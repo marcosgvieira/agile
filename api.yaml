@@ -50,6 +50,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LicenseResponse"
+        "401":
+          description: Unauthorized
   /jobs/activation:
     post:
       tags:
