@@ -1,28 +1,26 @@
-openapi: "3.0.3"
+openapi: 3.0.3
 info:
   title: Camunda 8 REST API
-  version: "0.1"
+  version: '0.1'
   description: API for communicating with a Camunda 8 cluster.
   license:
     name: Camunda License Version 1.0
-    url: https://github.com/camunda/camunda/blob/main/licenses/CAMUNDA-LICENSE-1.0.txt
+    url: 'https://github.com/camunda/camunda/blob/main/licenses/CAMUNDA-LICENSE-1.0.txt'
 externalDocs:
   description: Find out more
-  url: https://docs.camunda.io/docs/apis-tools/camunda-api-rest/overview/
-
+  url: 'https://docs.camunda.io/docs/apis-tools/camunda-api-rest/overview/'
 servers:
-  - url: "{schema}://{host}:{port}/v2"
+  - url: '{schema}://{host}:{port}/v2'
     variables:
       host:
         default: localhost
         description: The hostname of the Camunda 8 REST Gateway.
       port:
-        default: "8080"
+        default: '8080'
         description: The port of the Camunda 8 REST API server.
       schema:
         default: http
         description: The schema of the Camunda 8 REST API server.
-
 paths:
   /topology:
     get:
@@ -31,12 +29,12 @@ paths:
       summary: Get cluster topology
       description: Obtains the current topology of the cluster the gateway is part of.
       responses:
-        "200":
+        '200':
           description: Obtains the current topology of the cluster the gateway is part of.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TopologyResponse"
+                $ref: '#/components/schemas/TopologyResponse'
   /license:
     get:
       tags:
@@ -44,12 +42,14 @@ paths:
       summary: Get status of Camunda license
       description: Obtains the status of the current Camunda license
       responses:
-        "200":
+        '200':
           description: Obtains the current status of the Camunda license
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LicenseResponse"
+                $ref: '#/components/schemas/LicenseResponse'
+      x-stoplight:
+        id: c20hivz3s1nj2
   /jobs/activation:
     post:
       tags:
@@ -62,29 +62,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/JobActivationRequest"
+              $ref: '#/components/schemas/JobActivationRequest'
       responses:
-        "200":
+        '200':
           description: The list of activated jobs.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/JobActivationResponse"
-        "400":
-          description: >
+                $ref: '#/components/schemas/JobActivationResponse'
+        '400':
+          description: |
             The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /jobs/{jobKey}/failure:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/jobs/{jobKey}/failure':
     post:
       tags:
         - Job
@@ -104,40 +104,39 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/JobFailRequest"
+              $ref: '#/components/schemas/JobFailRequest'
       responses:
-        "204":
+        '204':
           description: The job is failed.
-        "400":
-          description: >
+        '400':
+          description: |
             The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
             The job with the given jobKey is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "409":
-          description: >
-            The job with the given key is in the wrong state currently.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
+          description: |
+            The job with the given key is in the wrong state currently. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /jobs/{jobKey}/error:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/jobs/{jobKey}/error':
     post:
       tags:
         - Job
@@ -157,40 +156,39 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/JobErrorRequest"
+              $ref: '#/components/schemas/JobErrorRequest'
       responses:
-        "204":
+        '204':
           description: An error is thrown for the job.
-        "400":
-          description: >
+        '400':
+          description: |
             The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
             The job with the given jobKey is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "409":
-          description: >
-            The job with the given key is in the wrong state currently.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
+          description: |
+            The job with the given key is in the wrong state currently. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /jobs/{jobKey}/completion:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/jobs/{jobKey}/completion':
     post:
       tags:
         - Job
@@ -210,40 +208,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/JobCompletionRequest"
+              $ref: '#/components/schemas/JobCompletionRequest'
       responses:
-        "204":
+        '204':
           description: The job was completed successfully.
-        "400":
-          description: >
-            The job with the given key cannot be completed.
-            More details are provided in the response body.
+        '400':
+          description: |
+            The job with the given key cannot be completed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The job with the given key was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "409":
-          description: >
-            The job with the given key is in the wrong state currently.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
+          description: |
+            The job with the given key is in the wrong state currently. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /jobs/{jobKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/jobs/{jobKey}':
     patch:
       tags:
         - Job
@@ -262,47 +258,44 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/JobUpdateRequest"
+              $ref: '#/components/schemas/JobUpdateRequest'
       responses:
-        "204":
+        '204':
           description: The job was updated successfully.
-        "400":
-          description: >
+        '400':
+          description: |
             The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The job with the jobKey is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "409":
-          description: >
-            The job with the given key is in the wrong state currently.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
+          description: |
+            The job with the given key is in the wrong state currently. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
-  /incidents/{incidentKey}/resolution:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/incidents/{incidentKey}/resolution':
     post:
       tags:
         - Incident
       summary: Resolve incident
-      description: >
-        Marks the incident as resolved; most likely a call to Update job will be necessary
-        to reset the job’s retries, followed by this call.
+      description: |
+        Marks the incident as resolved; most likely a call to Update job will be necessary to reset the job’s retries, followed by this call.
       parameters:
         - name: incidentKey
           in: path
@@ -312,28 +305,27 @@ paths:
             type: integer
             format: int64
       responses:
-        "204":
+        '204':
           description: The incident is marked as resolved.
-        "400":
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The incident with the incidentKey is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
-  /user-tasks/{userTaskKey}/completion:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/user-tasks/{userTaskKey}/completion':
     post:
       tags:
         - User task
@@ -352,41 +344,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserTaskCompletionRequest"
-
+              $ref: '#/components/schemas/UserTaskCompletionRequest'
       responses:
-        "204":
+        '204':
           description: The user task was completed successfully.
-        "400":
-          description: >
-            The user task with the given key cannot be completed.
-            More details are provided in the response body.
+        '400':
+          description: |
+            The user task with the given key cannot be completed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The user task with the given key was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "409":
-          description: >
-            The user task with the given key is in the wrong state currently.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
+          description: |
+            The user task with the given key is in the wrong state currently. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /user-tasks/{userTaskKey}/assignment:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/user-tasks/{userTaskKey}/assignment':
     post:
       tags:
         - User task
@@ -405,40 +394,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserTaskAssignmentRequest"
+              $ref: '#/components/schemas/UserTaskAssignmentRequest'
       responses:
-        "204":
+        '204':
           description: The user task's assignment was adjusted.
-        "400":
-          description: >
-            The assignment of the user task with the given key cannot be completed.
-            More details are provided in the response body.
+        '400':
+          description: |
+            The assignment of the user task with the given key cannot be completed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The user task with the given key was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "409":
-          description: >
-            The user task with the given key is in the wrong state currently.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
+          description: |
+            The user task with the given key is in the wrong state currently. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /user-tasks/{userTaskKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/user-tasks/{userTaskKey}':
     get:
       tags:
         - User task
@@ -461,36 +448,36 @@ paths:
             format: int64
       responses:
         '200':
-          description: >
+          description: |
             The user task is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserTaskItem"
-        "400":
-          description: "Bad request"
+                $ref: '#/components/schemas/UserTaskItem'
+        '400':
+          description: Bad request
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "401":
-          description: "Unauthorized"
+                $ref: '#/components/schemas/ProblemDetail'
+        '401':
+          description: Unauthorized
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: "Not found"
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: Not found
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: "Internal server error"
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: Internal server error
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
     patch:
       tags:
         - User task
@@ -509,40 +496,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserTaskUpdateRequest"
+              $ref: '#/components/schemas/UserTaskUpdateRequest'
       responses:
-        "204":
+        '204':
           description: The user task was updated successfully.
-        "400":
-          description: >
-            The user task with the given key cannot be updated.
-            More details are provided in the response body.
+        '400':
+          description: |
+            The user task with the given key cannot be updated. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The user task with the given key was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "409":
-          description: >
-            The user task with the given key is in the wrong state currently.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
+          description: |
+            The user task with the given key is in the wrong state currently. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /user-tasks/{userTaskKey}/form:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/user-tasks/{userTaskKey}/form':
     get:
       tags:
         - User task
@@ -569,40 +554,40 @@ paths:
             format: int64
       responses:
         '200':
-          description: >
+          description: |
             The form is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FormItem"
+                $ref: '#/components/schemas/FormItem'
         '204':
-          description: >
+          description: |
             The user task was found, but no form is associated with it.
-        "400":
-          description: "Bad request"
+        '400':
+          description: Bad request
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "401":
-          description: "Unauthorized"
+                $ref: '#/components/schemas/ProblemDetail'
+        '401':
+          description: Unauthorized
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: "Not found"
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: Not found
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: "Internal server error"
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: Internal server error
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /user-tasks/{userTaskKey}/assignee:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/user-tasks/{userTaskKey}/assignee':
     delete:
       tags:
         - User task
@@ -617,37 +602,35 @@ paths:
             type: integer
             format: int64
       responses:
-        "204":
+        '204':
           description: The user task was unassigned successfully.
-        "400":
-          description: >
-            The user task with the given key cannot be unassigned.
-            More details are provided in the response body.
+        '400':
+          description: |
+            The user task with the given key cannot be unassigned. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The user task with the given key was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "409":
-          description: >
-            The user task with the given key is in the wrong state currently.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
+          description: |
+            The user task with the given key is in the wrong state currently. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /user-tasks/search:
     post:
       tags:
@@ -666,31 +649,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserTaskSearchQueryRequest"
+              $ref: '#/components/schemas/UserTaskSearchQueryRequest'
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The user task search successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserTaskSearchQueryResponse"
-        "400":
-          description: >
-            The user task search query failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/UserTaskSearchQueryResponse'
+        '400':
+          description: |
+            The user task search query failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
   /variables/search:
     post:
       tags:
@@ -709,31 +690,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/VariableSearchQueryRequest"
+              $ref: '#/components/schemas/VariableSearchQueryRequest'
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The variable search successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/VariableSearchQueryResponse"
-        "400":
-          description: >
-            The user task search query failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/VariableSearchQueryResponse'
+        '400':
+          description: |
+            The user task search query failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /variables/{variableKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/variables/{variableKey}':
     get:
       tags:
         - Variable
@@ -755,36 +735,36 @@ paths:
             format: int64
       responses:
         '200':
-          description: >
+          description: |
             The variable is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/VariableItem"
-        "400":
-          description: "Bad request"
+                $ref: '#/components/schemas/VariableItem'
+        '400':
+          description: Bad request
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "401":
-          description: "Unauthorized"
+                $ref: '#/components/schemas/ProblemDetail'
+        '401':
+          description: Unauthorized
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: "Not found"
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: Not found
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: "Internal server error"
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: Internal server error
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /clock:
     put:
       tags:
@@ -804,23 +784,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ClockPinRequest"
+              $ref: '#/components/schemas/ClockPinRequest'
       responses:
-        "204":
-          description: >
+        '204':
+          description: |
             The clock was successfully pinned to the specified time in epoch milliseconds.
-        "400":
+        '400':
           description: The required timestamp parameter is missing or it is negative.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /clock/reset:
     post:
       tags:
@@ -835,14 +815,14 @@ paths:
         This endpoint is an [alpha feature](/reference/alpha-features.md) and may be subject to change
         in future releases.
       responses:
-        "204":
+        '204':
           description: The clock was successfully reset to the system time.
-        "500":
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /process-definitions/search:
     post:
       tags:
@@ -860,31 +840,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProcessDefinitionSearchQueryRequest"
+              $ref: '#/components/schemas/ProcessDefinitionSearchQueryRequest'
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The process definition search successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProcessDefinitionSearchQueryResponse"
-        "400":
-          description: >
-            The process definition search query failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProcessDefinitionSearchQueryResponse'
+        '400':
+          description: |
+            The process definition search query failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /process-definitions/{processDefinitionKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/process-definitions/{processDefinitionKey}':
     get:
       tags:
         - Process definition
@@ -900,42 +879,40 @@ paths:
         - name: processDefinitionKey
           in: path
           required: true
-          description: The assigned key of the process definition, which acts as a unique identifier for this process definition.
+          description: 'The assigned key of the process definition, which acts as a unique identifier for this process definition.'
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The process definition is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProcessDefinitionItem"
-        "400":
-          description: >
-            The process definition request failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProcessDefinitionItem'
+        '400':
+          description: |
+            The process definition request failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
-            The process definition with the given key was not found.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
+            The process definition with the given key was not found. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /process-definitions/{processDefinitionKey}/xml:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/process-definitions/{processDefinitionKey}/xml':
     get:
       tags:
         - Process definition
@@ -952,48 +929,46 @@ paths:
         - name: processDefinitionKey
           in: path
           required: true
-          description: The assigned key of the process definition, which acts as a unique identifier for this process.
+          description: 'The assigned key of the process definition, which acts as a unique identifier for this process.'
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The XML of the process definition is successfully returned.
           content:
             text/xml:
               schema:
                 type: string
-        "204":
-          description: >
+        '204':
+          description: |
             The process definition was found but does not have XML.
           content:
             text/plain:
               schema:
                 type: string
-        "400":
-          description: >
-            The process definition request failed.
-            More details are provided in the response body.
+        '400':
+          description: |
+            The process definition request failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
-            The decision with the given key was not found.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
+            The decision with the given key was not found. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /process-instances:
     post:
       tags:
@@ -1011,35 +986,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateProcessInstanceRequest"
+              $ref: '#/components/schemas/CreateProcessInstanceRequest'
             examples:
-              "By process definition key":
-                summary: "Create a process instance by processDefinitionKey."
+              By process definition key:
+                summary: Create a process instance by processDefinitionKey.
                 value:
                   processDefinitionKey: 12345
                   variables: {}
-              "By process definition ID":
-                summary: "Create a process instance by processDefinitionId and version."
+              By process definition ID:
+                summary: Create a process instance by processDefinitionId and version.
                 value:
-                  processDefinitionId: "1234-5678"
+                  processDefinitionId: 1234-5678
                   version: 1
                   variables: {}
       responses:
-        "200":
+        '200':
           description: The process instance was created.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateProcessInstanceResponse"
-        "400":
+                $ref: '#/components/schemas/CreateProcessInstanceResponse'
+        '400':
           description: The provided data is not valid.
-        "500":
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /process-instances/{processInstanceKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/process-instances/{processInstanceKey}':
     get:
       tags:
         - Process instance
@@ -1061,36 +1036,36 @@ paths:
             type: integer
             format: int64
       responses:
-        "200":
+        '200':
           description: The process instance is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProcessInstanceItem"
-        "400":
+                $ref: '#/components/schemas/ProcessInstanceItem'
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "401":
+                $ref: '#/components/schemas/ProblemDetail'
+        '401':
           description: The request lacks valid authentication credentials.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The process instance with the given key was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /process-instances/search:
     post:
       tags:
@@ -1109,29 +1084,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProcessInstanceSearchQueryRequest"
+              $ref: '#/components/schemas/ProcessInstanceSearchQueryRequest'
       responses:
-        "200":
+        '200':
           description: The process instance search successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProcessInstanceSearchQueryResponse"
-        "400":
-          description: >
-            The process instance search query failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProcessInstanceSearchQueryResponse'
+        '400':
+          description: |
+            The process instance search query failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /process-instances/{processInstanceKey}/cancellation:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/process-instances/{processInstanceKey}/cancellation':
     post:
       tags:
         - Process instance
@@ -1150,29 +1124,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CancelProcessInstanceRequest"
+              $ref: '#/components/schemas/CancelProcessInstanceRequest'
       responses:
-        "204":
+        '204':
           description: The process instance is canceled.
-        "400":
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The process instance is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /process-instances/{processInstanceKey}/migration:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/process-instances/{processInstanceKey}/migration':
     post:
       tags:
         - Process instance
@@ -1198,29 +1172,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MigrateProcessInstanceRequest"
+              $ref: '#/components/schemas/MigrateProcessInstanceRequest'
       responses:
-        "204":
+        '204':
           description: The process instance is migrated.
-        "400":
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The process instance is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /process-instances/{processInstanceKey}/modification:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/process-instances/{processInstanceKey}/modification':
     post:
       tags:
         - Process instance
@@ -1245,29 +1219,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ModifyProcessInstanceRequest"
+              $ref: '#/components/schemas/ModifyProcessInstanceRequest'
       responses:
-        "204":
+        '204':
           description: The process instance is modified.
-        "400":
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The process instance is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
   /flownode-instances/search:
     post:
       tags:
@@ -1286,31 +1259,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FlowNodeInstanceSearchQueryRequest"
+              $ref: '#/components/schemas/FlowNodeInstanceSearchQueryRequest'
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The Flow node instance search successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FlowNodeInstanceSearchQueryResponse"
-        "400":
-          description: >
-            The Flow node instance Search Query failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/FlowNodeInstanceSearchQueryResponse'
+        '400':
+          description: |
+            The Flow node instance Search Query failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /flownode-instances/{flownodeInstanceKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/flownode-instances/{flownodeInstanceKey}':
     get:
       tags:
         - Flow node instance
@@ -1326,41 +1298,39 @@ paths:
         - name: flownodeInstanceKey
           in: path
           required: true
-          description: The assigned key of the flow node instance, which acts as a unique identifier for this flow node instance.
+          description: 'The assigned key of the flow node instance, which acts as a unique identifier for this flow node instance.'
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The flow node instance is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FlowNodeInstanceItem"
-        "400":
-          description: >
-            The flow node instance Get failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/FlowNodeInstanceItem'
+        '400':
+          description: |
+            The flow node instance Get failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
-            The flow node instance with the given key was not found.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
+            The flow node instance with the given key was not found. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /decision-definitions/search:
     post:
       tags:
@@ -1379,31 +1349,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DecisionDefinitionSearchQueryRequest"
+              $ref: '#/components/schemas/DecisionDefinitionSearchQueryRequest'
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The Decision Definition Search successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DecisionDefinitionSearchQueryResponse"
-        "400":
-          description: >
-            The Decision Definition Search Query failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/DecisionDefinitionSearchQueryResponse'
+        '400':
+          description: |
+            The Decision Definition Search Query failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /decision-definitions/{decisionDefinitionKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/decision-definitions/{decisionDefinitionKey}':
     get:
       tags:
         - Decision definition
@@ -1420,42 +1389,40 @@ paths:
         - name: decisionDefinitionKey
           in: path
           required: true
-          description: The assigned key of the decision definition, which acts as a unique identifier for this decision.
+          description: 'The assigned key of the decision definition, which acts as a unique identifier for this decision.'
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The decision definition is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DecisionDefinitionItem"
-        "400":
-          description: >
-            The decision definition Get by key failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/DecisionDefinitionItem'
+        '400':
+          description: |
+            The decision definition Get by key failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
-            The decision with the given key was not found.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
+            The decision with the given key was not found. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /decision-definitions/{decisionDefinitionKey}/xml:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/decision-definitions/{decisionDefinitionKey}/xml':
     get:
       tags:
         - Decision definition
@@ -1472,41 +1439,39 @@ paths:
         - name: decisionDefinitionKey
           in: path
           required: true
-          description: The assigned key of the decision definition, which acts as a unique identifier for this decision.
+          description: 'The assigned key of the decision definition, which acts as a unique identifier for this decision.'
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The XML of the decision definition is successfully returned.
           content:
             text/xml:
               schema:
                 type: string
-        "400":
-          description: >
-            The Decision Definition Get XML failed.
-            More details are provided in the response body.
+        '400':
+          description: |
+            The Decision Definition Get XML failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
-            The decision with the given key was not found.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
+            The decision with the given key was not found. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /decision-requirements/search:
     post:
       tags:
@@ -1525,20 +1490,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DecisionRequirementsSearchQueryRequest"
+              $ref: '#/components/schemas/DecisionRequirementsSearchQueryRequest'
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The decision requirements search successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DecisionRequirementsSearchQueryResponse"
-        "400":
-          description: >
-            The decision requirements search query failed.
-            More details are provided in the response body.
-  /decision-requirements/{decisionRequirementsKey}:
+                $ref: '#/components/schemas/DecisionRequirementsSearchQueryResponse'
+        '400':
+          description: |
+            The decision requirements search query failed. More details are provided in the response body.
+  '/decision-requirements/{decisionRequirementsKey}':
     get:
       tags:
         - Decision requirements
@@ -1555,42 +1519,40 @@ paths:
         - name: decisionRequirementsKey
           in: path
           required: true
-          description: The assigned key of the decision requirements, which acts as a unique identifier for this decision requirements.
+          description: 'The assigned key of the decision requirements, which acts as a unique identifier for this decision requirements.'
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The decision requirements is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DecisionRequirementsItem"
-        "400":
-          description: >
-            The decision requirements Get failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/DecisionRequirementsItem'
+        '400':
+          description: |
+            The decision requirements Get failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
-            The decision requirements with the given key was not found.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
+            The decision requirements with the given key was not found. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /decision-requirements/{decisionRequirementsKey}/xml:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/decision-requirements/{decisionRequirementsKey}/xml':
     get:
       tags:
         - Decision requirements
@@ -1607,42 +1569,39 @@ paths:
         - name: decisionRequirementsKey
           in: path
           required: true
-          description: The assigned key of the decision requirements, which acts as a unique identifier for this decision.
+          description: 'The assigned key of the decision requirements, which acts as a unique identifier for this decision.'
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The XML of the decision requirements is successfully returned.
           content:
             text/xml:
               schema:
                 type: string
-        "400":
-          description: >
-            The decision requirements Get XML failed.
-            More details are provided in the response body.
+        '400':
+          description: |
+            The decision requirements Get XML failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
-            The decision requirements with the given key was not found.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
+            The decision requirements with the given key was not found. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
   /decision-instances/search:
     post:
       tags:
@@ -1661,32 +1620,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DecisionInstanceSearchQueryRequest"
+              $ref: '#/components/schemas/DecisionInstanceSearchQueryRequest'
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The decision instance search successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DecisionInstanceSearchQueryResponse"
-        "400":
-          description: >
-            The decision instance search query failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/DecisionInstanceSearchQueryResponse'
+        '400':
+          description: |
+            The decision instance search query failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
-  /decision-instances/{decisionInstanceKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/decision-instances/{decisionInstanceKey}':
     get:
       tags:
         - Decision instance
@@ -1703,43 +1660,39 @@ paths:
         - name: decisionInstanceKey
           in: path
           required: true
-          description: The assigned key of the decision instance, which acts as a unique identifier for this decision instance.
+          description: 'The assigned key of the decision instance, which acts as a unique identifier for this decision instance.'
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The decision instance is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DecisionInstanceGetQueryResponse"
-        "400":
-          description: >
-            The decision instance request failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/DecisionInstanceGetQueryResponse'
+        '400':
+          description: |
+            The decision instance request failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
-            The decision instance with the given key was not found.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
+            The decision instance with the given key was not found. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
-
+                $ref: '#/components/schemas/ProblemDetail'
   /decision-definitions/evaluation:
     post:
       tags:
@@ -1755,45 +1708,44 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EvaluateDecisionRequest"
+              $ref: '#/components/schemas/EvaluateDecisionRequest'
             examples:
-              "By decision definition key":
-                summary: "Evaluate the decision by decisionDefinitionKey."
+              By decision definition key:
+                summary: Evaluate the decision by decisionDefinitionKey.
                 value:
                   decisionDefinitionKey: 12345
                   variables: {}
-              "By decision definition ID":
-                summary: "Evaluate the decision by decisionDefinitionId."
+              By decision definition ID:
+                summary: Evaluate the decision by decisionDefinitionId.
                 value:
-                  decisionDefinitionId: "1234-5678"
+                  decisionDefinitionId: 1234-5678
                   variables: {}
       responses:
-        "200":
+        '200':
           description: The decision was evaluated.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EvaluateDecisionResponse"
-        "400":
+                $ref: '#/components/schemas/EvaluateDecisionResponse'
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The decision is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
-  /authorizations/{ownerKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/authorizations/{ownerKey}':
     patch:
       tags:
         - Authorization
@@ -1812,105 +1764,103 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AuthorizationPatchRequest"
+              $ref: '#/components/schemas/AuthorizationPatchRequest'
         required: true
       responses:
-        "202":
+        '202':
           description: |
             The Authorization was patched successfully.
-        "400":
+        '400':
           description: |
             The Authorization could not be patched.
             More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "401":
+                $ref: '#/components/schemas/ProblemDetail'
+        '401':
           description: |
             The request to patch the authorization was unauthorized.
             More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "403":
+                $ref: '#/components/schemas/ProblemDetail'
+        '403':
           description: |
             The request to patch an authorization was denied.
             More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: |
             The owner was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "409":
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
           description: |
             The request to add or remove permissions to an authorization was in conflict.
             More details are provided in the response body.
-        "500":
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
   /users:
     post:
       tags:
         - User
-      summary: "Create a user"
-      operationId: "createUser"
+      summary: Create a user
+      operationId: createUser
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserRequest"
+              $ref: '#/components/schemas/UserRequest'
         required: true
       responses:
-        "202":
+        '202':
           description: |
             The user was created successfully.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserCreateResponse"
-        "400":
+                $ref: '#/components/schemas/UserCreateResponse'
+        '400':
           description: |
             The user could not be created.
             More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "401":
+                $ref: '#/components/schemas/ProblemDetail'
+        '401':
           description: |
             The request to create a user was unauthorized.
             More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "403":
+                $ref: '#/components/schemas/ProblemDetail'
+        '403':
           description: |
             The request to create a user was denied.
             More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
   /messages/publication:
     post:
       tags:
@@ -1926,26 +1876,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MessagePublicationRequest"
+              $ref: '#/components/schemas/MessagePublicationRequest'
       responses:
-        "200":
+        '200':
           description: The message was published.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MessagePublicationResponse"
-        "400":
+                $ref: '#/components/schemas/MessagePublicationResponse'
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: Internal server error.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /messages/correlation:
     post:
       tags:
@@ -1959,39 +1909,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MessageCorrelationRequest"
+              $ref: '#/components/schemas/MessageCorrelationRequest'
       responses:
-        "200":
+        '200':
           description: The message is correlated to one or more process instances
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MessageCorrelationResponse"
-        "400":
+                $ref: '#/components/schemas/MessageCorrelationResponse'
+        '400':
           description: The provided data is not valid
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "403":
+                $ref: '#/components/schemas/ProblemDetail'
+        '403':
           description: Unauthorized
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: Not found
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: Internal server error
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
   /documents:
     post:
       tags:
@@ -2014,9 +1963,8 @@ paths:
         - name: documentId
           in: query
           required: false
-          description: >
-            The ID of the document to upload. If not provided, a new ID will be generated.
-            Specifying an existing ID will result in an error if the document already exists.
+          description: |
+            The ID of the document to upload. If not provided, a new ID will be generated. Specifying an existing ID will result in an error if the document already exists.
           schema:
             type: string
       requestBody:
@@ -2030,27 +1978,27 @@ paths:
                   type: string
                   format: binary
                 metadata:
-                  $ref: "#/components/schemas/DocumentMetadata"
+                  $ref: '#/components/schemas/DocumentMetadata'
               required:
                 - file
             encoding:
               metadata:
                 contentType: application/json
       responses:
-        "201":
+        '201':
           description: The document was uploaded successfully.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DocumentReference"
-        "400":
-          description: >
+                $ref: '#/components/schemas/DocumentReference'
+        '400':
+          description: |
             The document upload failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /documents/{documentId}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/documents/{documentId}':
     get:
       tags:
         - Documents
@@ -2076,27 +2024,27 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: The document was downloaded successfully.
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
-        "404":
-          description: >
+        '404':
+          description: |
             The document with the given ID was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
     delete:
       tags:
         - Documents
@@ -2122,23 +2070,23 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: The document was deleted successfully.
-        "404":
-          description: >
+        '404':
+          description: |
             The document with the given ID was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /document/{documentId}/links:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/document/{documentId}/links':
     post:
       tags:
         - Documents
@@ -2168,27 +2116,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DocumentLinkRequest"
+              $ref: '#/components/schemas/DocumentLinkRequest'
       responses:
-        "201":
+        '201':
           description: The document link was created successfully.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DocumentLink"
-        "400":
-          description: >
+                $ref: '#/components/schemas/DocumentLink'
+        '400':
+          description: |
             The document link creation failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
   /users/search:
     post:
       tags:
         - User
-      summary: "Query users (alpha)"
+      summary: Query users (alpha)
       description: |
         Search for users based on given criteria.
 
@@ -2197,51 +2144,50 @@ paths:
         See the [Camunda 8 REST API overview](/apis-tools/camunda-api-rest/camunda-api-rest-overview.md#query-api)
         for further details.
         :::
-      operationId: "findAllUsers"
+      operationId: findAllUsers
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserSearchQueryRequest"
+              $ref: '#/components/schemas/UserSearchQueryRequest'
         required: true
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserSearchResponse"
-        "400":
-          description: "Bad request"
+                $ref: '#/components/schemas/UserSearchResponse'
+        '400':
+          description: Bad request
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "401":
-          description: "Unauthorized"
+                $ref: '#/components/schemas/ProblemDetail'
+        '401':
+          description: Unauthorized
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "403":
-          description: "Forbidden"
+                $ref: '#/components/schemas/ProblemDetail'
+        '403':
+          description: Forbidden
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: "Not found"
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: Not found
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: "Internal server error"
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: Internal server error
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
   /incidents/search:
     post:
       tags:
@@ -2260,44 +2206,43 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/IncidentSearchQueryRequest"
+              $ref: '#/components/schemas/IncidentSearchQueryRequest'
       responses:
         '200':
-          description: >
+          description: |
             The incident search successful response.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/IncidentSearchQueryResponse"
+                $ref: '#/components/schemas/IncidentSearchQueryResponse'
         '400':
-          description: >
-            The incident search query failed.
-            More details are provided in the response body.
-        "401":
-          description: "Unauthorized"
+          description: |
+            The incident search query failed. More details are provided in the response body.
+        '401':
+          description: Unauthorized
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "403":
-          description: "Forbidden"
+                $ref: '#/components/schemas/ProblemDetail'
+        '403':
+          description: Forbidden
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: "Not found"
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: Not found
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: "Internal server error"
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: Internal server error
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /incidents/{incidentKey}:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/incidents/{incidentKey}':
     get:
       tags:
         - Incident
@@ -2313,41 +2258,39 @@ paths:
         - name: incidentKey
           in: path
           required: true
-          description: The assigned key of the incident, which acts as a unique identifier for this incident.
+          description: 'The assigned key of the incident, which acts as a unique identifier for this incident.'
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: >
+        '200':
+          description: |
             The incident is successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/IncidentItem"
-        "400":
-          description: >
-            The incident Get failed.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/IncidentItem'
+        '400':
+          description: |
+            The incident Get failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
-          description: >
-            The incident with the given key was not found.
-            More details are provided in the response body.
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: |
+            The incident with the given key was not found. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
-          description: >
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: |
             An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: '#/components/schemas/ProblemDetail'
   /deployments:
     post:
       tags:
@@ -2376,20 +2319,20 @@ paths:
               required:
                 - resource
       responses:
-        "200":
+        '200':
           description: The resources are deployed.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DeploymentResponse"
-        "400":
-          description: >
+                $ref: '#/components/schemas/DeploymentResponse'
+        '400':
+          description: |
             The document upload failed. More details are provided in the response body.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-  /resources/{resourceKey}/deletion:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/resources/{resourceKey}/deletion':
     post:
       tags:
         - Resource
@@ -2414,31 +2357,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeleteResourceRequest"
+              $ref: '#/components/schemas/DeleteResourceRequest'
       responses:
-        "200":
+        '200':
           description: The resource is deleted.
-        "400":
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The resource is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
-
-  /element-instances/{elementInstanceKey}/variables:
+                $ref: '#/components/schemas/ProblemDetail'
+  '/element-instances/{elementInstanceKey}/variables':
     post:
       tags:
         - Element instance
@@ -2462,23 +2403,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SetVariableRequest"
+              $ref: '#/components/schemas/SetVariableRequest'
       responses:
-        "204":
+        '204':
           description: The variables were updated.
-        "400":
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
   /signals/broadcast:
     post:
       tags:
@@ -2490,53 +2430,52 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SignalBroadcastRequest"
+              $ref: '#/components/schemas/SignalBroadcastRequest'
       responses:
-        "200":
+        '200':
           description: The signal was broadcast.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SignalBroadcastResponse"
-        "400":
+                $ref: '#/components/schemas/SignalBroadcastResponse'
+        '400':
           description: The provided data is not valid.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "404":
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
           description: The signal is not found.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-        "500":
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
           description: An internal error occurred while processing the request.
           content:
             application/problem+json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-
+                $ref: '#/components/schemas/ProblemDetail'
 components:
   schemas:
     UserTaskSearchQueryRequest:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       description: User task search query request.
       type: object
       properties:
         filter:
-          $ref: "#/components/schemas/UserTaskFilterRequest"
+          $ref: '#/components/schemas/UserTaskFilterRequest'
     UserTaskSearchQueryResponse:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryResponse"
+        - $ref: '#/components/schemas/SearchQueryResponse'
       description: User task search query response.
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/UserTaskItem"
+            $ref: '#/components/schemas/UserTaskItem'
     UserTaskFilterRequest:
       description: User task filter request.
       type: object
@@ -2567,7 +2506,7 @@ components:
         variables:
           type: array
           items:
-            $ref: "#/components/schemas/UserTaskVariableFilterRequest"
+            $ref: '#/components/schemas/UserTaskVariableFilterRequest'
     UserTaskVariableFilterRequest:
       type: object
       properties:
@@ -2640,12 +2579,12 @@ components:
           default: 50
     VariableSearchQueryRequest:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       description: Variable search query request.
       type: object
       properties:
         filter:
-          $ref: "#/components/schemas/VariableFilterRequest"
+          $ref: '#/components/schemas/VariableFilterRequest'
     VariableFilterRequest:
       description: Variable filter request.
       type: object
@@ -2675,15 +2614,15 @@ components:
           description: Whether the value is truncated or not.
           type: boolean
     VariableSearchQueryResponse:
-        allOf:
-            - $ref: "#/components/schemas/SearchQueryResponse"
-        description: Variable search query response.
-        type: object
-        properties:
+      allOf:
+        - $ref: '#/components/schemas/SearchQueryResponse'
+      description: Variable search query response.
+      type: object
+      properties:
+        items:
+          type: array
           items:
-            type: array
-            items:
-                $ref: "#/components/schemas/VariableItem"
+            $ref: '#/components/schemas/VariableItem'
     VariableItem:
       description: Variable search response item.
       type: object
@@ -2717,12 +2656,12 @@ components:
           type: boolean
     ProcessDefinitionSearchQueryRequest:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       type: object
       properties:
         filter:
           allOf:
-            - $ref: "#/components/schemas/ProcessDefinitionFilterRequest"
+            - $ref: '#/components/schemas/ProcessDefinitionFilterRequest'
     ProcessDefinitionFilterRequest:
       type: object
       properties:
@@ -2744,20 +2683,20 @@ components:
           description: Version tag of this process definition.
           type: string
         processDefinitionId:
-          description:  Process defintion id of this process definition.
+          description: Process defintion id of this process definition.
           type: string
         tenantId:
           description: Tenant id of this process definition.
           type: string
     ProcessDefinitionSearchQueryResponse:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryResponse"
+        - $ref: '#/components/schemas/SearchQueryResponse'
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/ProcessDefinitionItem"
+            $ref: '#/components/schemas/ProcessDefinitionItem'
     ProcessDefinitionItem:
       type: object
       properties:
@@ -2787,12 +2726,12 @@ components:
     ProcessInstanceSearchQueryRequest:
       description: Process instance search request.
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       type: object
       properties:
         filter:
           allOf:
-            - $ref: "#/components/schemas/ProcessInstanceFilterRequest"
+            - $ref: '#/components/schemas/ProcessInstanceFilterRequest'
     ProcessInstanceFilterRequest:
       description: Process instance search filter.
       type: object
@@ -2828,7 +2767,7 @@ components:
           format: int64
         treePath:
           type: string
-          description: The path of keys to this process instance, separated by '/'.
+          description: 'The path of keys to this process instance, separated by ''/''.'
         startDate:
           type: string
           description: The start date.
@@ -2839,7 +2778,7 @@ components:
           format: date-time
         state:
           $ref: '#/components/schemas/ProcessInstanceStateEnum'
-          description: The state, one of ACTIVE, COMPLETED, CANCELED.
+          description: 'The state, one of ACTIVE, COMPLETED, CANCELED.'
         hasIncident:
           type: boolean
           description: Whether this process instance has a related incident or not.
@@ -2861,13 +2800,13 @@ components:
     ProcessInstanceSearchQueryResponse:
       description: Process instance search response.
       allOf:
-        - $ref: "#/components/schemas/SearchQueryResponse"
+        - $ref: '#/components/schemas/SearchQueryResponse'
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/ProcessInstanceItem"
+            $ref: '#/components/schemas/ProcessInstanceItem'
     ProcessInstanceItem:
       description: Process instance search response item.
       type: object
@@ -2903,7 +2842,7 @@ components:
           format: int64
         treePath:
           type: string
-          description: The path of keys to this process instance, separated by '/'.
+          description: 'The path of keys to this process instance, separated by ''/''.'
         startDate:
           type: string
           description: The start date.
@@ -2914,7 +2853,7 @@ components:
           format: date-time
         state:
           $ref: '#/components/schemas/ProcessInstanceStateEnum'
-          description: The state, one of ACTIVE, COMPLETED, CANCELED.
+          description: 'The state, one of ACTIVE, COMPLETED, CANCELED.'
         hasIncident:
           type: boolean
           description: Whether this process instance has a related incident or not.
@@ -2937,22 +2876,21 @@ components:
           type: integer
           format: int64
           minimum: 1
-
     FlowNodeInstanceSearchQueryRequest:
       description: Flow node instance search request
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       type: object
       properties:
         filter:
           allOf:
-            - $ref: "#/components/schemas/FlowNodeInstanceFilterRequest"
+            - $ref: '#/components/schemas/FlowNodeInstanceFilterRequest'
     FlowNodeInstanceFilterRequest:
       type: object
       properties:
         flowNodeInstanceKey:
           type: integer
-          description: The assigned key, which acts as a unique identifier for this flow node instance.
+          description: 'The assigned key, which acts as a unique identifier for this flow node instance.'
           format: int64
         processInstanceKey:
           type: integer
@@ -3022,19 +2960,19 @@ components:
           type: string
     FlowNodeInstanceSearchQueryResponse:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryResponse"
+        - $ref: '#/components/schemas/SearchQueryResponse'
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/FlowNodeInstanceItem"
+            $ref: '#/components/schemas/FlowNodeInstanceItem'
     FlowNodeInstanceItem:
       type: object
       properties:
         flowNodeInstanceKey:
           type: integer
-          description: The assigned key, which acts as a unique identifier for this flow node instance.
+          description: 'The assigned key, which acts as a unique identifier for this flow node instance.'
           format: int64
         processInstanceKey:
           description: The process instance key associated to this flow node instance.
@@ -3109,19 +3047,19 @@ components:
           type: string
     DecisionDefinitionSearchQueryRequest:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       type: object
       properties:
         filter:
           allOf:
-            - $ref: "#/components/schemas/DecisionDefinitionFilterRequest"
+            - $ref: '#/components/schemas/DecisionDefinitionFilterRequest'
     DecisionDefinitionFilterRequest:
       type: object
       properties:
         decisionDefinitionKey:
           type: integer
           format: int64
-          description: The assigned key, which acts as a unique identifier for this decision definition.
+          description: 'The assigned key, which acts as a unique identifier for this decision definition.'
         decisionDefinitionId:
           type: string
           description: The DMN id of the decision definition.
@@ -3144,19 +3082,19 @@ components:
           description: The tenant id of the decision definition.
     IncidentSearchQueryRequest:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       type: object
       properties:
         filter:
           allOf:
-            - $ref: "#/components/schemas/IncidentFilterRequest"
+            - $ref: '#/components/schemas/IncidentFilterRequest'
     IncidentFilterRequest:
       type: object
       properties:
         incidentKey:
           type: integer
           format: int64
-          description: The assigned key, which acts as a unique identifier for this incident.
+          description: 'The assigned key, which acts as a unique identifier for this incident.'
         processDefinitionKey:
           type: integer
           format: int64
@@ -3209,7 +3147,7 @@ components:
         jobKey:
           type: integer
           format: int64
-          description: The job key, if exists, associated with this incident.
+          description: 'The job key, if exists, associated with this incident.'
         treePath:
           type: string
           description: The path from process instance via flow node ids and flow node instance keys leading to this incident.
@@ -3218,20 +3156,20 @@ components:
           type: string
     IncidentSearchQueryResponse:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryResponse"
+        - $ref: '#/components/schemas/SearchQueryResponse'
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/IncidentItem"
+            $ref: '#/components/schemas/IncidentItem'
     IncidentItem:
       type: object
       properties:
         incidentKey:
           type: integer
           format: int64
-          description: The assigned key, which acts as a unique identifier for this incident.
+          description: 'The assigned key, which acts as a unique identifier for this incident.'
         processDefinitionKey:
           type: integer
           format: int64
@@ -3277,13 +3215,13 @@ components:
           type: string
           description: State of this incident with a defined set of values.
           enum:
-          - ACTIVE
-          - MIGRATED
-          - RESOLVED
-          - PENDING
+            - ACTIVE
+            - MIGRATED
+            - RESOLVED
+            - PENDING
         jobKey:
           type: integer
-          description: The job key, if exists, associated with this incident.
+          description: 'The job key, if exists, associated with this incident.'
           format: int64
         treePath:
           type: string
@@ -3292,7 +3230,7 @@ components:
           description: The tenant id of the incident.
           type: string
     OperationItem:
-      description: " Operation"
+      description: ' Operation'
       type: object
       properties:
         id:
@@ -3325,7 +3263,7 @@ components:
           type: string
           format: date-time
     ProcessInstanceReferenceItem:
-      description: "Process instance reference description"
+      description: Process instance reference description
       type: object
       properties:
         instanceId:
@@ -3336,20 +3274,20 @@ components:
           type: string
     DecisionDefinitionSearchQueryResponse:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryResponse"
+        - $ref: '#/components/schemas/SearchQueryResponse'
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/DecisionDefinitionItem"
+            $ref: '#/components/schemas/DecisionDefinitionItem'
     DecisionDefinitionItem:
       type: object
       properties:
         decisionDefinitionKey:
           type: integer
           format: int64
-          description: The assigned key, which acts as a unique identifier for this decision definition.
+          description: 'The assigned key, which acts as a unique identifier for this decision definition.'
         decisionDefinitionId:
           type: string
           description: The DMN id of the decision definition.
@@ -3414,64 +3352,64 @@ components:
                 items:
                   type: string
     UserRequest:
-      type: "object"
+      type: object
       properties:
         password:
-          type: "string"
+          type: string
         username:
-          type: "string"
+          type: string
         name:
-          type: "string"
+          type: string
         email:
-          type: "string"
+          type: string
     UserCreateResponse:
-      type: "object"
+      type: object
       properties:
         userKey:
           description: The key of the created user
-          type: "integer"
-          format: "int64"
+          type: integer
+          format: int64
     UserSearchQueryRequest:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       type: object
       properties:
         filter:
           allOf:
-            - $ref: "#/components/schemas/UserFilterRequest"
+            - $ref: '#/components/schemas/UserFilterRequest'
     UserFilterRequest:
       type: object
       properties:
         username:
-          type: "string"
+          type: string
         name:
-          type: "string"
+          type: string
         email:
-          type: "string"
+          type: string
     UserResponse:
-      type: "object"
+      type: object
       properties:
         id:
-          type: "integer"
-          format: "int64"
+          type: integer
+          format: int64
         key:
-          type: "integer"
-          format: "int64"
+          type: integer
+          format: int64
         username:
-          type: "string"
+          type: string
         name:
-          type: "string"
+          type: string
         email:
-          type: "string"
+          type: string
     UserSearchResponse:
       type: object
       allOf:
-        - $ref: "#/components/schemas/SearchQueryResponse"
+        - $ref: '#/components/schemas/SearchQueryResponse'
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/UserResponse"
+            $ref: '#/components/schemas/UserResponse'
     TopologyResponse:
       description: The response of a topology request.
       type: object
@@ -3481,7 +3419,7 @@ components:
           type: array
           nullable: true
           items:
-            $ref: "#/components/schemas/BrokerInfo"
+            $ref: '#/components/schemas/BrokerInfo'
         clusterSize:
           description: The number of brokers in the cluster.
           type: integer
@@ -3506,7 +3444,7 @@ components:
       type: object
       properties:
         validLicense:
-          description: True if the Camunda license is valid, false if otherwise
+          description: 'True if the Camunda license is valid, false if otherwise'
           type: boolean
           nullable: false
         licenseType:
@@ -3531,7 +3469,7 @@ components:
           description: A list of partitions managed or replicated on this broker.
           type: array
           items:
-            $ref: "#/components/schemas/Partition"
+            $ref: '#/components/schemas/Partition'
         version:
           description: The broker version.
           type: string
@@ -3566,9 +3504,8 @@ components:
           type: object
           nullable: true
         action:
-          description: >
-            A custom action value that will be accessible from user task events resulting
-            from this endpoint invocation. If not provided, it will default to "complete".
+          description: |
+            A custom action value that will be accessible from user task events resulting from this endpoint invocation. If not provided, it will default to "complete".
           type: string
           nullable: true
     UserTaskAssignmentRequest:
@@ -3579,28 +3516,23 @@ components:
           type: string
           nullable: false
         allowOverride:
-          description: >
-            By default, the task is reassigned if it was already assigned. Set this to `false`
-            to return an error in such cases. The task must then first be unassigned to
-            be assigned again. Use this when you have users picking from group task
-            queues to prevent race conditions.
+          description: |
+            By default, the task is reassigned if it was already assigned. Set this to `false` to return an error in such cases. The task must then first be unassigned to be assigned again. Use this when you have users picking from group task queues to prevent race conditions.
           type: boolean
           nullable: true
         action:
-          description: >
-            A custom action value that will be accessible from user task events resulting
-            from this endpoint invocation. If not provided, it will default to "assign".
+          description: |
+            A custom action value that will be accessible from user task events resulting from this endpoint invocation. If not provided, it will default to "assign".
           type: string
           nullable: true
     UserTaskUpdateRequest:
       type: object
       properties:
         changeset:
-          $ref: "#/components/schemas/Changeset"
+          $ref: '#/components/schemas/Changeset'
         action:
-          description: >
-            A custom action value that will be accessible from user task events resulting
-            from this endpoint invocation. If not provided, it will default to "update".
+          description: |
+            A custom action value that will be accessible from user task events resulting from this endpoint invocation. If not provided, it will default to "update".
           type: string
           nullable: true
     Changeset:
@@ -3668,18 +3600,16 @@ components:
       type: object
       properties:
         type:
-          description: >
-            the job type, as defined in the BPMN process (e.g. <zeebe:taskDefinition
-            type="payment-service" />)
+          description: |
+            the job type, as defined in the BPMN process (e.g. <zeebe:taskDefinition type="payment-service" />)
           type: string
         worker:
-          description: the name of the worker activating the jobs, mostly used for logging purposes
+          description: 'the name of the worker activating the jobs, mostly used for logging purposes'
           type: string
           nullable: true
         timeout:
-          description: >
-            a job returned after this call will not be activated by another call until the
-            timeout (in ms) has been reached
+          description: |
+            a job returned after this call will not be activated by another call until the timeout (in ms) has been reached
           type: integer
           format: int64
         maxJobsToActivate:
@@ -3687,19 +3617,15 @@ components:
           type: integer
           format: int32
         fetchVariable:
-          description: >
-            a list of variables to fetch as the job variables; if empty, all visible variables at
-            the time of activation for the scope of the job will be returned
+          description: |
+            a list of variables to fetch as the job variables; if empty, all visible variables at the time of activation for the scope of the job will be returned
           type: array
           nullable: true
           items:
             type: string
         requestTimeout:
-          description: >
-            The request will be completed when at least one job is activated or after the
-            requestTimeout (in ms). If the requestTimeout = 0, a default timeout is used.
-            If the requestTimeout < 0, long polling is disabled and the request is completed
-            immediately, even when no job is activated.
+          description: |
+            The request will be completed when at least one job is activated or after the requestTimeout (in ms). If the requestTimeout = 0, a default timeout is used. If the requestTimeout < 0, long polling is disabled and the request is completed immediately, even when no job is activated.
           type: integer
           format: int64
           default: 0
@@ -3721,12 +3647,12 @@ components:
         jobs:
           type: array
           items:
-            $ref: "#/components/schemas/ActivatedJob"
+            $ref: '#/components/schemas/ActivatedJob'
     ActivatedJob:
       type: object
       properties:
         jobKey:
-          description: the key, a unique identifier for the job
+          description: 'the key, a unique identifier for the job'
           type: integer
           format: int64
         type:
@@ -3751,9 +3677,8 @@ components:
           description: the associated task element ID
           type: string
         elementInstanceKey:
-          description: >
-            the unique key identifying the associated task, unique within the scope of the
-            process instance
+          description: |
+            the unique key identifying the associated task, unique within the scope of the process instance
           type: integer
           format: int64
         customHeaders:
@@ -3768,11 +3693,11 @@ components:
           type: integer
           format: int32
         deadline:
-          description: when the job can be activated again, sent as a UNIX epoch timestamp
+          description: 'when the job can be activated again, sent as a UNIX epoch timestamp'
           type: integer
           format: int64
         variables:
-          description: All variables visible to the task scope, computed at activation time
+          description: 'All variables visible to the task scope, computed at activation time'
           type: object
           additionalProperties: true
         tenantId:
@@ -3782,46 +3707,43 @@ components:
       type: object
       properties:
         retries:
-          description: >
+          description: |
             The amount of retries the job should have left
           type: integer
           format: int32
           default: 0
         errorMessage:
-          description: >
-            An optional message describing why the job failed. This is particularly useful if a job
-            runs out of retries and an incident is raised, as this message can help explain why an
-            incident was raised.
+          description: |
+            An optional message describing why the job failed. This is particularly useful if a job runs out of retries and an incident is raised, as this message can help explain why an incident was raised.
           type: string
           nullable: true
         retryBackOff:
-          description: >
+          description: |
             The backoff timeout (in ms) for the next retry.
           type: integer
           format: int64
           default: 0
         variables:
           additionalProperties: true
-          description: >
-            JSON object that will instantiate the variables at the local scope of the job's
-            associated task.
+          description: |
+            JSON object that will instantiate the variables at the local scope of the job's associated task.
           type: object
           nullable: true
     JobErrorRequest:
       type: object
       properties:
         errorCode:
-          description: >
+          description: |
             The error code that will be matched with an error catch event.
           type: string
         errorMessage:
-          description: >
+          description: |
             An error message that provides additional context.
           type: string
           nullable: true
         variables:
           additionalProperties: true
-          description: >
+          description: |
             JSON object that will instantiate the variables at the local scope of the error catch event that catches the thrown error.
           type: object
           nullable: true
@@ -3839,7 +3761,7 @@ components:
       type: object
       properties:
         changeset:
-          $ref: "#/components/schemas/JobChangeset"
+          $ref: '#/components/schemas/JobChangeset'
       required:
         - changeset
     JobChangeset:
@@ -3865,20 +3787,18 @@ components:
         timeout:
           type: integer
           format: int64
-          description: The duration of the new timeout in ms, starting from the current moment.
+          description: 'The duration of the new timeout in ms, starting from the current moment.'
           nullable: true
-
     ProblemDetail:
-      description: >
-        A Problem detail object as described in [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457).
-        There may be additional properties specific to the problem type.
+      description: |
+        A Problem detail object as described in [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457). There may be additional properties specific to the problem type.
       type: object
       properties:
         type:
           type: string
           format: uri
           description: A URI identifying the problem type.
-          default: about:blank
+          default: 'about:blank'
         title:
           type: string
           description: A summary of the problem type.
@@ -3902,10 +3822,10 @@ components:
           type: array
           items:
             allOf:
-              - $ref: "#/components/schemas/SearchQuerySortRequest"
+              - $ref: '#/components/schemas/SearchQuerySortRequest'
         page:
           allOf:
-            - $ref: "#/components/schemas/SearchQueryPageRequest"
+            - $ref: '#/components/schemas/SearchQueryPageRequest'
           type: object
     SearchQueryPageRequest:
       type: object
@@ -3939,7 +3859,7 @@ components:
       properties:
         page:
           allOf:
-            - $ref: "#/components/schemas/SearchQueryPageResponse"
+            - $ref: '#/components/schemas/SearchQueryPageResponse'
           type: object
     SearchQueryPageResponse:
       type: object
@@ -3974,19 +3894,19 @@ components:
           type: object
     DecisionRequirementsSearchQueryRequest:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       type: object
       properties:
         filter:
           allOf:
-            - $ref: "#/components/schemas/DecisionRequirementsFilterRequest"
+            - $ref: '#/components/schemas/DecisionRequirementsFilterRequest'
     DecisionRequirementsFilterRequest:
       type: object
       properties:
         decisionRequirementsKey:
           type: integer
           format: int64
-          description: The assigned key, which acts as a unique identifier for this decision requirements.
+          description: 'The assigned key, which acts as a unique identifier for this decision requirements.'
         name:
           type: string
           description: The DMN name of the decision requirements.
@@ -4002,20 +3922,20 @@ components:
           description: The tenant ID of the decision requirements.
     DecisionRequirementsSearchQueryResponse:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryResponse"
+        - $ref: '#/components/schemas/SearchQueryResponse'
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/DecisionRequirementsItem"
+            $ref: '#/components/schemas/DecisionRequirementsItem'
     DecisionRequirementsItem:
       type: object
       properties:
         decisionRequirementsKey:
           type: integer
           format: int64
-          description: The assigned key, which acts as a unique identifier for this decision requirements.
+          description: 'The assigned key, which acts as a unique identifier for this decision requirements.'
         name:
           type: string
           description: The DMN name of the decision requirements.
@@ -4098,7 +4018,7 @@ components:
         evaluatedDecisions:
           type: array
           items:
-            $ref: "#/components/schemas/EvaluatedDecisionItem"
+            $ref: '#/components/schemas/EvaluatedDecisionItem'
     EvaluatedDecisionItem:
       type: object
       description: List of decisions that were evaluated within the requested decision evaluation.
@@ -4130,11 +4050,11 @@ components:
         matchedRules:
           type: array
           items:
-            $ref: "#/components/schemas/MatchedDecisionRuleItem"
+            $ref: '#/components/schemas/MatchedDecisionRuleItem'
         evaluatedInputs:
           type: array
           items:
-            $ref: "#/components/schemas/EvaluatedDecisionInputItem"
+            $ref: '#/components/schemas/EvaluatedDecisionInputItem'
     MatchedDecisionRuleItem:
       type: object
       description: The decision rules that matched within this decision evaluation.
@@ -4149,7 +4069,7 @@ components:
         evaluatedOutputs:
           type: array
           items:
-            $ref: "#/components/schemas/EvaluatedDecisionOutputItem"
+            $ref: '#/components/schemas/EvaluatedDecisionOutputItem'
     EvaluatedDecisionInputItem:
       type: object
       description: The decision inputs that were evaluated within this decision evaluation.
@@ -4178,12 +4098,12 @@ components:
           type: string
     DecisionInstanceSearchQueryRequest:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryRequest"
+        - $ref: '#/components/schemas/SearchQueryRequest'
       type: object
       properties:
         filter:
           allOf:
-            - $ref: "#/components/schemas/DecisionInstanceFilterRequest"
+            - $ref: '#/components/schemas/DecisionInstanceFilterRequest'
     DecisionInstanceFilterRequest:
       type: object
       properties:
@@ -4227,14 +4147,13 @@ components:
           description: The tenant ID of the decision instance.
     DecisionInstanceSearchQueryResponse:
       allOf:
-        - $ref: "#/components/schemas/SearchQueryResponse"
+        - $ref: '#/components/schemas/SearchQueryResponse'
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/DecisionInstanceItem"
-
+            $ref: '#/components/schemas/DecisionInstanceItem'
     DecisionInstanceItem:
       type: object
       properties:
@@ -4283,7 +4202,6 @@ components:
         tenantId:
           type: string
           description: The tenant ID of the decision instance.
-
     DecisionInstanceGetQueryResponse:
       allOf:
         - $ref: '#/components/schemas/DecisionInstanceItem'
@@ -4292,16 +4210,15 @@ components:
             evaluatedInputs:
               type: array
               items:
-                $ref: "#/components/schemas/EvaluatedDecisionInputItem"
+                $ref: '#/components/schemas/EvaluatedDecisionInputItem'
               description: |
                 The evaluated inputs of the decision instance.
             matchedRules:
               type: array
               items:
-                $ref: "#/components/schemas/MatchedDecisionRuleItem"
+                $ref: '#/components/schemas/MatchedDecisionRuleItem'
               description: |
                 The matched rules of the decision instance.
-
     DecisionDefinitionTypeEnum:
       enum:
         - DECISION_TABLE
@@ -4314,18 +4231,17 @@ components:
         - FAILED
         - UNSPECIFIED
         - UNKNOWN
-
     MessageCorrelationRequest:
       type: object
       properties:
         name:
-          description: >
+          description: |
             The message name as defined in the BPMN process
           type: string
         correlationKey:
           description: The correlation key of the message
           type: string
-          default: ""
+          default: ''
         variables:
           description: The message variables as JSON document
           additionalProperties: true
@@ -4361,7 +4277,7 @@ components:
         correlationKey:
           description: The correlation key of the message.
           type: string
-          default: ""
+          default: ''
         timeToLive:
           description: Timespan (in ms) to buffer the message on the broker.
           type: integer
@@ -4396,7 +4312,6 @@ components:
         tenantId:
           description: The tenant ID of the message.
           type: string
-
     DocumentReference:
       type: object
       properties:
@@ -4412,7 +4327,7 @@ components:
           type: string
           description: The ID of the document.
         metadata:
-          $ref: "#/components/schemas/DocumentMetadata"
+          $ref: '#/components/schemas/DocumentMetadata'
     DocumentMetadata:
       type: object
       additionalProperties: true
@@ -4449,7 +4364,6 @@ components:
           type: string
           format: date-time
           description: The date and time when the link expires.
-
     DeploymentResponse:
       type: object
       properties:
@@ -4460,20 +4374,20 @@ components:
         deployments:
           type: array
           items:
-            $ref: "#/components/schemas/DeploymentMetadata"
+            $ref: '#/components/schemas/DeploymentMetadata'
         tenantId:
           type: string
     DeploymentMetadata:
       type: object
       properties:
         processDefinition:
-          $ref: "#/components/schemas/DeploymentProcess"
+          $ref: '#/components/schemas/DeploymentProcess'
         decisionDefinition:
-          $ref: "#/components/schemas/DeploymentDecision"
+          $ref: '#/components/schemas/DeploymentDecision'
         decisionRequirements:
-          $ref: "#/components/schemas/DeploymentDecisionRequirements"
+          $ref: '#/components/schemas/DeploymentDecisionRequirements'
         form:
-          $ref: "#/components/schemas/DeploymentForm"
+          $ref: '#/components/schemas/DeploymentForm'
     DeploymentProcess:
       type: object
       properties:
@@ -4489,7 +4403,7 @@ components:
         processDefinitionKey:
           type: integer
           format: int64
-          description: The assigned key, which acts as a unique identifier for this process.
+          description: 'The assigned key, which acts as a unique identifier for this process.'
         resourceName:
           type: string
           description: The resource name from which this process was parsed.
@@ -4515,7 +4429,7 @@ components:
             The assigned decision key, which acts as a unique identifier for this decision.
         name:
           type: string
-          description: The DMN name of the decision, as parsed during deployment.
+          description: 'The DMN name of the decision, as parsed during deployment.'
         tenantId:
           type: string
           description: The tenant ID of the deployed decision.
@@ -4541,7 +4455,7 @@ components:
           description: The assigned decision requirements version.
         name:
           type: string
-          description: The DMN name of the decision requirements, as parsed during deployment.
+          description: 'The DMN name of the decision requirements, as parsed during deployment.'
         tenantId:
           type: string
           description: The tenant ID of the deployed decision requirements.
@@ -4568,14 +4482,13 @@ components:
         formKey:
           type: integer
           format: int64
-          description: The assigned key, which acts as a unique identifier for this form.
+          description: 'The assigned key, which acts as a unique identifier for this form.'
         resourceName:
           type: string
           description: The resource name from which this form was parsed.
         tenantId:
           type: string
           description: The tenant ID of the deployed form.
-
     CreateProcessInstanceRequest:
       type: object
       properties:
@@ -4620,7 +4533,7 @@ components:
             after it has been created.
           type: array
           items:
-            $ref: "#/components/schemas/ProcessInstanceCreationStartInstruction"
+            $ref: '#/components/schemas/ProcessInstanceCreationStartInstruction'
         awaitCompletion:
           description: |
             Wait for the process instance to complete. If the process instance completion does
@@ -4692,11 +4605,10 @@ components:
         mappingInstructions:
           type: array
           items:
-            $ref: "#/components/schemas/MigrateProcessInstanceMappingInstruction"
+            $ref: '#/components/schemas/MigrateProcessInstanceMappingInstruction'
         operationReference:
-          description: >
-            A reference key chosen by the user that will be part of all records resulting from this operation.
-            Must be > 0 if provided.
+          description: |
+            A reference key chosen by the user that will be part of all records resulting from this operation. Must be > 0 if provided.
           type: integer
           format: int64
           minimum: 1
@@ -4723,15 +4635,14 @@ components:
         activateInstructions:
           type: array
           items:
-            $ref: "#/components/schemas/ModifyProcessInstanceActivateInstruction"
+            $ref: '#/components/schemas/ModifyProcessInstanceActivateInstruction'
         terminateInstructions:
           type: array
           items:
-            $ref: "#/components/schemas/ModifyProcessInstanceTerminateInstruction"
+            $ref: '#/components/schemas/ModifyProcessInstanceTerminateInstruction'
         operationReference:
-          description: >
-            A reference key chosen by the user that will be part of all records resulting from this operation.
-            Must be > 0 if provided.
+          description: |
+            A reference key chosen by the user that will be part of all records resulting from this operation. Must be > 0 if provided.
           type: integer
           format: int64
           minimum: 1
@@ -4754,7 +4665,7 @@ components:
         variableInstructions:
           type: array
           items:
-            $ref: "#/components/schemas/ModifyProcessInstanceVariableInstruction"
+            $ref: '#/components/schemas/ModifyProcessInstanceVariableInstruction'
       required:
         - elementId
     ModifyProcessInstanceVariableInstruction:
@@ -4772,7 +4683,7 @@ components:
             The ID of the element in which scope the variables should be created.
             Leave empty to create the variables in the global scope of the process instance
           type: string
-          default: ""
+          default: ''
       required:
         - variables
     ModifyProcessInstanceTerminateInstruction:
@@ -4785,7 +4696,6 @@ components:
           format: int64
       required:
         - elementInstanceKey
-
     SetVariableRequest:
       type: object
       properties:
@@ -4813,15 +4723,13 @@ components:
           type: boolean
           default: false
         operationReference:
-          description: >
-            A reference key chosen by the user that will be part of all records resulting from this operation.
-            Must be > 0 if provided.
+          description: |
+            A reference key chosen by the user that will be part of all records resulting from this operation. Must be > 0 if provided.
           type: integer
           format: int64
           minimum: 1
       required:
         - variables
-
     DeleteResourceRequest:
       type: object
       nullable: true
@@ -4833,7 +4741,6 @@ components:
           type: integer
           format: int64
           minimum: 1
-
     SignalBroadcastRequest:
       type: object
       properties:
